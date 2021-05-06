@@ -52,12 +52,14 @@ export function messagesTreeToFormikErrors(formErrorMessagesTree: {
 }
 
 export function formikResolver<S extends FormikFormSchema>(schema: S) {
-  return (values: unknown): void | FormikErrors<InferType<S>> => {
+  return (values: unknown): undefined | FormikErrors<InferType<S>> => {
     const result = schema.validate(values);
 
     if (result.errors) {
       if (result.messagesTree instanceof Array) {
-        return undefined;
+        throw new Error(
+          "Messages tree should be an object. Make sure you're using an object schema to validate your form."
+        );
       } else {
         return messagesTreeToFormikErrors(result.messagesTree) as FormikErrors<
           InferType<S>
