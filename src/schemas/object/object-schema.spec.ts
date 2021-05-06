@@ -1,5 +1,6 @@
 import { equals } from "../equals/equals-schema";
 import { ValidationResult } from "../schema";
+import { string } from "../string/string-schema";
 import { object } from "./object-schema";
 
 describe("Object Schema", () => {
@@ -38,6 +39,19 @@ describe("Object Schema", () => {
     expect(result).toEqual({
       errors: true,
       messagesTree: { a: ["Input is not defined"] },
+    });
+  });
+
+  it("Should fail with an invalid property", () => {
+    const schema = object({
+      a: string().defined(),
+    });
+
+    const result = schema.validate({ a: true });
+
+    expect(result).toEqual({
+      errors: true,
+      messagesTree: { a: ["Input is not a string"] },
     });
   });
 
