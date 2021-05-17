@@ -76,7 +76,7 @@
     "globals": {
       "ts-jest": {
         "isolatedModules": true,
-        "tsconfig": "tsconfig.release.json"
+        "tsconfig": "tsconfig.json"
       }
     },
     "testEnvironment": "node",
