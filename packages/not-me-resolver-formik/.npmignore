@@ -1,4 +1,4 @@
-*
+.npmrc
 
-!/lib/**/*.js!(.map)
-!/lib/**/*.d.ts
+/lib/tsconfig.*.tsbuildinfo
+/lib/**/*.js.map
