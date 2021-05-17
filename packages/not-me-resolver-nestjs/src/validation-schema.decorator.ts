@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { SetMetadata } from "@nestjs/common";
-import { Schema } from "../../schemas/schema";
+import { Schema } from "not-me/lib/schemas/schema";
 
 export const VALIDATION_SCHEMA_KEY = "not-me-validation-schema";
 

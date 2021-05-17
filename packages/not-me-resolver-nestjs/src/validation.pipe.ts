@@ -5,7 +5,7 @@ import {
   ArgumentMetadata,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { throwError } from "../../utils/throw-error";
+import { throwError } from "not-me/lib/utils/throw-error";
 import {
   SupportedValidationSchema,
   VALIDATION_SCHEMA_KEY,
