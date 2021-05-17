@@ -4,12 +4,15 @@
   "description": "NestJS resolver for the Not-Me validation library",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
   "engines": {
     "node": ">=12"
   },
   "scripts": {
     "build": "npm run clean && tsc --project tsconfig.release.json",
-    "build:watch": "tsc --project tsconfig.release.json --watch",
+    "build:watch": "tsc --project tsconfig.watch.json --watch",
     "clean": "rimraf lib",
     "typecheck": "tsc --noEmit",
     "test": "jest",
