@@ -1,8 +1,8 @@
 import { BadRequestException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { number } from "../../schemas/number/number-schema";
-import { object } from "../../schemas/object/object-schema";
-import { Schema } from "../../schemas/schema";
+import { number } from "not-me/lib/schemas/number/number-schema";
+import { object } from "not-me/lib/schemas/object/object-schema";
+import { Schema } from "not-me/lib/schemas/schema";
 import { ValidationSchema } from "./validation-schema.decorator";
 import { NotMeValidationPipe } from "./validation.pipe";
 

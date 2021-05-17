@@ -181,12 +181,16 @@ If you plan on doing a custom `validate` function, `not-me-resolver-formik` also
 
 By integrating this resolver with your NestJS project, parameters annotated with `@Param`, `@Query` and `@Body` will be validated by `not-me`. The parameters need to be typed as **ES6 classes** and annotated with the `@ValidationSchema` decorator, in order to get the validation schema working throught reflection.
 
+```
+$ npm install not-me-resolver-nestjs
+```
+
 - `app.ts`
 
   ```typescript
   import { Module, OnApplicationShutdown } from "@nestjs/common";
   import { APP_PIPE } from "@nestjs/core";
-  import { NotMeValidationPipe } from "not-me/lib/resolvers/nest/validation.pipe";
+  import { NotMeValidationPipe } from "not-me-resolver-nestjs";
 
   @Module({
     providers: [
@@ -211,7 +215,7 @@ By integrating this resolver with your NestJS project, parameters annotated with
     import { object } from "not-me/lib/schemas/object/object-schema";
     import { string } from "not-me/lib/schemas/string/string-schema";
     import { Schema } from "not-me/lib/schemas/schema";
-    import { ValidationSchema } from "not-me/lib/resolvers/nest/validation-schema.decorator";
+    import { ValidationSchema } from "not-me-resolver-nestjs";
 
     const schema: Schema<AnyDataDTO> = object({
       field: string().defined(),
@@ -231,7 +235,7 @@ By integrating this resolver with your NestJS project, parameters annotated with
     import { object } from "not-me/lib/schemas/object/object-schema";
     import { string } from "not-me/lib/schemas/string/string-schema";
     import { InferType } from "not-me/lib/schemas/schema";
-    import { ValidationSchema } from "not-me/lib/resolvers/nest/validation-schema.decorator";
+    import { ValidationSchema } from "not-me-resolver-nestjs";
 
     const schema = object({
       field: string().defined(),
