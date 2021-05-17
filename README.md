@@ -40,7 +40,7 @@ Our take on validation with `not-me` is almost to provide you with enough boiler
 ### Installing:
 
 ```
-npm install not-me
+$ npm install not-me
 ```
 
 ### Imports:
