@@ -161,8 +161,12 @@ This package includes validation resolvers to work with the following libraries 
 
 #### <a name="formik"></a> Formik
 
+```
+$ npm install not-me-resolver-formik
+```
+
 ```tsx
-import { formikResolver } from "not-me/lib/resolvers/formik/formik-resolver";
+import { formikResolver } from "not-me-resolver-formik";
 
 // (...)
 
@@ -171,7 +175,7 @@ import { formikResolver } from "not-me/lib/resolvers/formik/formik-resolver";
 </Formik>;
 ```
 
-If you plan on doing a custom `validate` function, `not-me/lib/resolvers/formik/formik-resolver` also exports `messagesTreeToFormikErrors`, which transforms _Not-Me_ error message trees into _Formik_ errors.
+If you plan on doing a custom `validate` function, `not-me-resolver-formik` also exports `messagesTreeToFormikErrors`, which transforms _Not-Me_ error message trees into _Formik_ errors.
 
 #### <a name="nest"></a> Nest
 
