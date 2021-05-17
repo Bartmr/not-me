@@ -1,6 +1,6 @@
 {
   "name": "not-me-resolver-formik",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Formik resolver for the Not-Me validation library",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -11,7 +11,7 @@
     "node": ">=12"
   },
   "scripts": {
-    "build": "npm run clean && tsc --project tsconfig.release.json && node scripts/bundle-declaration-references.js",
+    "build": "npm run clean && tsc --project tsconfig.release.json",
     "build:watch": "tsc --project tsconfig.release.json --watch",
     "clean": "rimraf lib",
     "typecheck": "tsc --noEmit",
