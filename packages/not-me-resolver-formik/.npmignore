@@ -1,4 +1,0 @@
-.npmrc
-
-/lib/tsconfig.*.tsbuildinfo
-/lib/**/*.js.map
