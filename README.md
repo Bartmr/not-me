@@ -157,7 +157,7 @@ export function integer(message?: string) {
 This package includes validation resolvers to work with the following libraries / frameworks:
 
 - [Formik](#formik)
-- [React-hook-form](#rhf)
+- [React Hook Form](#rhf)
 - [Nest](#nest)
 
 #### <a name="formik"></a> Formik
@@ -178,14 +178,14 @@ import { formikResolver } from "not-me-resolver-formik";
 
 If you plan on doing a custom `validate` function, `not-me-resolver-formik` also exports `messagesTreeToFormikErrors`, which transforms _Not-Me_ error message trees into _Formik_ errors.
 
-#### <a name="rhf"></a> React-hook-form
+#### <a name="rhf"></a> React Hook Form
 
 ```
-$ npm install not-me-resolver-rhf
+$ npm install not-me-resolver-react-hook-form
 ```
 
 ```tsx
-import { rhfResolver } from "not-me-resolver-rhf";
+import { rhfResolver } from "not-me-resolver-react-hook-form";
 
 // (...)
 
