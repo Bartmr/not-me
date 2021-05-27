@@ -1,7 +1,7 @@
 {
-  "name": "not-me-resolver-rhf",
-  "version": "1.0.2",
-  "description": "React-Hook-Form resolver for the Not-Me validation library",
+  "name": "not-me-resolver-react-hook-form",
+  "version": "1.0.0",
+  "description": "React Hook Form resolver for the Not-Me validation library",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -26,7 +26,7 @@
     "lint": "npm run eslint -- --fix",
     "lint:no-fix": "npm run eslint",
     "precommit": "lint-staged && npm run typecheck && npm run lint:no-fix",
-    "npm-check-updates": "npm-check-updates",
+    "update-all-dependencies": "npm-check-updates -u && rimraf package-lock.json && npm install",
     "prepublishOnly": "npm run test && npm run build"
   },
   "author": "Gil Neto",
@@ -36,7 +36,7 @@
   },
   "dependencies": {},
   "peerDependencies": {
-    "react-hook-form": "^7.3.4",
+    "react-hook-form": "^7.6.8",
     "not-me": "^2.0.1"
   },
   "devDependencies": {
@@ -55,7 +55,7 @@
     "not-me": "^2.0.1",
     "npm-check-updates": "^11.4.1",
     "prettier": "^2.2.1",
-    "react-hook-form": "^7.6.7",
+    "react-hook-form": "^7.6.8",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "ts-jest": "^26.5.5",
