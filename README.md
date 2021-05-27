@@ -157,6 +157,7 @@ export function integer(message?: string) {
 This package includes validation resolvers to work with the following libraries / frameworks:
 
 - [Formik](#formik)
+- [React-hook-form](#rhf)
 - [Nest](#nest)
 
 #### <a name="formik"></a> Formik
@@ -176,6 +177,22 @@ import { formikResolver } from "not-me-resolver-formik";
 ```
 
 If you plan on doing a custom `validate` function, `not-me-resolver-formik` also exports `messagesTreeToFormikErrors`, which transforms _Not-Me_ error message trees into _Formik_ errors.
+
+#### <a name="rhf"></a> React-hook-form
+
+```
+$ npm install not-me-resolver-rhf
+```
+
+```tsx
+import { rhfResolver } from "not-me-resolver-rhf";
+
+// (...)
+
+const resolver = rhfResolver(notMeSchema);
+const { handleSubmit, register } = useForm({ resolver });
+
+```
 
 #### <a name="nest"></a> Nest
 
@@ -202,7 +219,7 @@ $ npm install not-me-resolver-nestjs
   })
   export class AppModule {}
   ```
-
+  
 - `any-data.dto.ts`
 
   > Tie both the DTO class and the schema type by either **typing the schema with the DTO class** or **implementing the schema's inferred type**

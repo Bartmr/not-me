@@ -26,7 +26,7 @@
     "lint": "npm run eslint -- --fix",
     "lint:no-fix": "npm run eslint",
     "precommit": "lint-staged && npm run typecheck && npm run lint:no-fix",
-    "npm-check-updates": "npm-check-updates",
+    "update-all-dependencies": "npm-check-updates -u && rimraf package-lock.json && npm install",
     "bundle-readme": "cp ../../README.md README.md",
     "prepublishOnly": "npm run test && npm run build && npm run bundle-readme"
   },
