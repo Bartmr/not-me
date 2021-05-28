@@ -1,6 +1,6 @@
 {
   "name": "not-me-resolver-react-hook-form",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React Hook Form resolver for the Not-Me validation library",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

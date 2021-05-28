@@ -22,10 +22,10 @@ describe("React-Hook-Form resolver", () => {
       h2: number().defined()
     })).defined()
   }).defined();
-  let resolver: (values: unknown) => (ResolverResult | undefined);
+  let resolver: (values: unknown) => (ResolverResult);
 
   beforeEach(() => {
-    resolver = rhfResolver(schema) as (values: unknown) => (ResolverResult | undefined);
+    resolver = rhfResolver(schema) as (values: unknown) => (ResolverResult);
   })
 
   it("Return undefined if form value is valid", () => {
@@ -42,7 +42,7 @@ describe("React-Hook-Form resolver", () => {
       },
       h: [{ h1: 'string in array', h2: 1 }, { h1: 'another string in array', h2: 2 }]
     }
-    expect(resolver(test)).toEqual({errors: {}, values: {}});
+    expect(resolver(test)).toEqual({ errors: {}, values: test });
   });
 
   it("Return a RhfError if form value is invalid", () => {
