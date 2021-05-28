@@ -31,7 +31,7 @@ export function messagesTreeToRhfErrors(formErrorMessagesTree: FormErrorMessages
 }
 
 export function rhfResolver<S extends Schema<unknown>>(schema: S) {
-  return (values: unknown): undefined | ResolverResult<S> => {
+  return (values: S): ResolverResult<S> => {
     const result = schema.validate(values);
     if (result.errors) {
       if (result.messagesTree instanceof Array) {
@@ -46,7 +46,7 @@ export function rhfResolver<S extends Schema<unknown>>(schema: S) {
       }
     } else {
       return {
-        values: {},
+        values,
         errors: {}
       };
     }
