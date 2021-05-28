@@ -185,7 +185,7 @@ $ npm install not-me-resolver-rhf
 ```
 
 ```tsx
-import { rhfResolver } from "not-me-resolver-rhf";
+import { rhfResolver } from "not-me-resolver-react-hook-form";
 
 // (...)
 
