@@ -10,7 +10,7 @@ describe("Base Schema", () => {
         .test((v) => v < 1000, "Must be smaller than 1000"),
     }).defined();
 
-    expect(schema.validate({ a: 1000.1 })).toEqual({
+    expect(schema.validate({ a: 1000.1 }, { abortEarly: false })).toEqual({
       errors: true,
       messagesTree: {
         a: ["Input is not an integer", "Must be smaller than 1000"],
