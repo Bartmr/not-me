@@ -123,6 +123,9 @@ const schema = object({
 - **`InferType<typeof schema>`**: get the output type of a schema
 - **`Schema<T>`**: dictates that a value is a schema that has an output type of `T`
 
+### Validation options
+- `abortEarly`: stop validation when the first invalid field is found. Default is `true` when running in *NodeJS*, to avoid performance issues.
+
 ### Creating a schema of my own:
 
 Just extend the class of the closest schema there is for your type of value, and call the `transform()` and `test()` methods in your new schema to setup the validation logic that will be run. Can be either in it's _constructor_, or you can add new methods to your schema.

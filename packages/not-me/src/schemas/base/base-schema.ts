@@ -77,8 +77,14 @@ export abstract class BaseSchema<
 
   validate(
     input: unknown,
-    options: ValidationOptions = undefined
+    options?: ValidationOptions
   ): ValidationResult<InferType<this>> {
+    const _options: ValidationOptions = {
+      // Use typeof to avoid 'process is not defined' error
+      abortEarly: typeof process === "undefined" ? false : true,
+      ...options,
+    };
+
     let _currentValue = input;
 
     if (this.wrapValueBeforeValidation) {
@@ -116,7 +122,7 @@ export abstract class BaseSchema<
 
       const typeFilterResponse = this.baseTypeFilter.filterFn(
         _currentValue,
-        options
+        _options
       );
 
       if (typeFilterResponse.errors) {
@@ -140,7 +146,7 @@ export abstract class BaseSchema<
 
           const filterRes = shapeFilter.filterFn(
             shapedValueWithUnknownProperties,
-            options
+            _options
           );
 
           if (filterRes.errors) {
@@ -159,7 +165,7 @@ export abstract class BaseSchema<
         for (let i = 0; i < this.shapeFilters.length; i++) {
           const shapeFilter = this.shapeFilters[i] || throwError();
 
-          const filterRes = shapeFilter.filterFn(shapedValue, options);
+          const filterRes = shapeFilter.filterFn(shapedValue, _options);
 
           if (filterRes.errors) {
             return filterRes;
@@ -184,7 +190,7 @@ export abstract class BaseSchema<
         if (!valid) {
           const messages = [filter.getMessage()];
 
-          if (options?.abortEarly) {
+          if (_options.abortEarly) {
             return {
               errors: true,
               messagesTree: messages,
