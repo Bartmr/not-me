@@ -14,7 +14,7 @@ export function objectTypeFilter(
         message ||
           DefaultErrorMessagesManager.getDefaultMessages().object
             ?.notAnObject ||
-          "Input is not an object",
+          "Input must be an object",
       ],
     };
   }

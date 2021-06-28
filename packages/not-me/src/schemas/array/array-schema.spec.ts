@@ -30,7 +30,7 @@ describe("Array Schema", () => {
   it("Should fail when input is not an array", () => {
     expect(schema.validate(null)).toEqual({
       errors: true,
-      messagesTree: ["Input is null"],
+      messagesTree: ["Input cannot be null"],
     });
   });
 
@@ -38,7 +38,7 @@ describe("Array Schema", () => {
     expect(schema.validate([undefined, undefined, { someProp: "c" }])).toEqual({
       errors: true,
       messagesTree: {
-        2: { someProp: ["Input is not equal to any of the allowed values"] },
+        2: { someProp: ["Input must be one of the allowed values"] },
       },
     });
   });
@@ -48,14 +48,14 @@ describe("Array Schema", () => {
       arraySchema.max(1).validate([undefined, undefined, undefined])
     ).toEqual({
       errors: true,
-      messagesTree: ["Array has more elements than expected"],
+      messagesTree: ["Must have less than 1 item"],
     });
   });
 
   it("Should fail if array lenght is below minimum", () => {
     expect(arraySchema.min(1).validate([])).toEqual({
       errors: true,
-      messagesTree: ["Array has less elements than expected"],
+      messagesTree: ["Must have more than 1 item"],
     });
   });
 

@@ -7,7 +7,7 @@ describe("String Schema", () => {
 
     expect(schema.validate({})).toEqual({
       errors: true,
-      messagesTree: ["Input is not a string"],
+      messagesTree: ["Input must be a string"],
     });
   });
 
@@ -16,7 +16,7 @@ describe("String Schema", () => {
 
     expect(schema.validate("   ")).toEqual({
       errors: true,
-      messagesTree: ["Field must be filled"],
+      messagesTree: ["Input must be filled"],
     });
   });
 });

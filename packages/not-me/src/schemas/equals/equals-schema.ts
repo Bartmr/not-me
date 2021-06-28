@@ -18,7 +18,7 @@ export class EqualsSchema<
             message ||
               DefaultErrorMessagesManager.getDefaultMessages().equals
                 ?.notEqual ||
-              "Input is not equal to any of the allowed values",
+              "Input must be one of the allowed values",
           ],
         };
       }

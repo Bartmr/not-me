@@ -20,7 +20,7 @@ export class StringSchema<
           message ||
             DefaultErrorMessagesManager.getDefaultMessages().string
               ?.notAString ||
-            "Input is not a string",
+            "Input must be a string",
         ];
 
         return {
@@ -46,7 +46,7 @@ export class StringSchema<
       () =>
         message ||
         DefaultErrorMessagesManager.getDefaultMessages().string?.notAString ||
-        "Field must be filled"
+        "Input must be filled"
     );
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return

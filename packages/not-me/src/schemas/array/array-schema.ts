@@ -29,7 +29,7 @@ export class ArraySchema<
             message ||
               DefaultErrorMessagesManager.getDefaultMessages().array
                 ?.notAnArray ||
-              "Input is not an array",
+              "Input must be an array",
           ],
         };
       }
@@ -40,14 +40,19 @@ export class ArraySchema<
 
       const validatedArray = [];
 
+      const lessThanMinimumDefaultMessage = DefaultErrorMessagesManager.getDefaultMessages().array
+      ?.lessThanMinimum
+
+      const moreThanMaximumDefaultMessage = DefaultErrorMessagesManager.getDefaultMessages().array
+      ?.moreThanMaximum
+
       if (input.length < this.minLength) {
         return {
           errors: true,
           messagesTree: [
             this.minLengthMessage ||
-              DefaultErrorMessagesManager.getDefaultMessages().array
-                ?.lessThanMinimum ||
-              "Array has less elements than expected",
+              (lessThanMinimumDefaultMessage && lessThanMinimumDefaultMessage(this.minLength)) ||
+              `Must have more than ${this.minLength} item${this.minLength === 1 ? '' : 's'}`,
           ],
         };
       } else if (input.length > this.maxLength) {
@@ -55,9 +60,8 @@ export class ArraySchema<
           errors: true,
           messagesTree: [
             this.maxLengthMessage ||
-              DefaultErrorMessagesManager.getDefaultMessages().array
-                ?.moreThanMaximum ||
-              "Array has more elements than expected",
+            (moreThanMaximumDefaultMessage && moreThanMaximumDefaultMessage(this.maxLength)) ||
+              `Must have less than ${this.maxLength} item${this.maxLength === 1 ? '' : 's'}`,
           ],
         };
       }

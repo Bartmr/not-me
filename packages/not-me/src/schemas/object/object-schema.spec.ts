@@ -24,7 +24,7 @@ describe("Object Schema", () => {
     expect(result).toEqual({
       errors: true,
       messagesTree: {
-        a: ["Input is not an object"],
+        a: ["Input must be an object"],
       },
     });
   });
@@ -38,7 +38,7 @@ describe("Object Schema", () => {
 
     expect(result).toEqual({
       errors: true,
-      messagesTree: { a: ["Input is not defined"] },
+      messagesTree: { a: ["Input is required"] },
     });
   });
 
@@ -51,7 +51,7 @@ describe("Object Schema", () => {
 
     expect(result).toEqual({
       errors: true,
-      messagesTree: { a: ["Input is not a string"] },
+      messagesTree: { a: ["Input must be a string"] },
     });
   });
 

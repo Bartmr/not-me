@@ -7,7 +7,7 @@ export class DateSchema extends BaseSchema<Date> {
       const notADateMessages = [
         message ||
           DefaultErrorMessagesManager.getDefaultMessages().date?.notADate ||
-          "Input is not a date",
+          "Input must be a date",
       ];
 
       const invalidDateMessages = [

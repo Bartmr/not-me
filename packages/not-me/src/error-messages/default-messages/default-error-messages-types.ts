@@ -1,36 +1,33 @@
-type DeepPartial<T> = {
-  [P in keyof T]?: DeepPartial<T[P]>;
-};
 
-export type DefaultErrorMessages = DeepPartial<{
-  object: {
+export type DefaultErrorMessages = Partial<{
+  object: Partial<{
     notAnObject: string;
-  };
-  array: {
+  }>;
+  array: Partial<{
     notAnArray: string;
-    lessThanMinimum: string;
-    moreThanMaximum: string;
-  };
-  base: {
+    lessThanMinimum: (minLength: number) => string;
+    moreThanMaximum: (maxLength: number) => string;
+  }>;
+  base: Partial<{
     isNull: string;
     isUndefined: string;
-  };
-  equals: {
+  }>;
+  equals: Partial<{
     notEqual: string;
-  };
-  number: {
+  }>;
+  number: Partial<{
     notANumber: string;
     isNotInteger: string;
-  };
-  string: {
+  }>;
+  string: Partial<{
     notAString: string;
     notFilled: string;
-  };
-  date: {
+  }>;
+  date: Partial<{
     notADate: string;
     invalidDate: string;
-  };
-  boolean: {
+  }>;
+  boolean: Partial<{
     notABoolean: string;
-  };
+  }>;
 }>;

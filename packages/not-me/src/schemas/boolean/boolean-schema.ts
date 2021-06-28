@@ -19,7 +19,7 @@ export class BooleanSchema extends BaseSchema<boolean> {
           message ||
             DefaultErrorMessagesManager.getDefaultMessages().boolean
               ?.notABoolean ||
-            "Input is not a boolean",
+            "Input must be a true or false",
         ];
 
         return {

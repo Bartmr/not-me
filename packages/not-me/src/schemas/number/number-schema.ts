@@ -7,7 +7,7 @@ export class NumberSchema extends BaseSchema<number> {
       const typeErrorMessage = [
         message ||
           DefaultErrorMessagesManager.getDefaultMessages().number?.notANumber ||
-          "Input is not a number",
+          "Input must be a number",
       ];
 
       if (typeof input === "number" || typeof input === "string") {
@@ -39,7 +39,7 @@ export class NumberSchema extends BaseSchema<number> {
       () =>
         message ||
         DefaultErrorMessagesManager.getDefaultMessages().number?.isNotInteger ||
-        "Input is not an integer"
+        "Input must be an integer"
     );
 
     return this;

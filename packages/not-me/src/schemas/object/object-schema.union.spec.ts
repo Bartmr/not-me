@@ -60,7 +60,7 @@ describe("Object Schema - Union", () => {
       expect(result).toEqual({
         errors: true,
         messagesTree: {
-          d: ["Input is not equal to any of the allowed values"],
+          d: ["Input must be one of the allowed values"],
         },
       });
     });

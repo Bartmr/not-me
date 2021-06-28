@@ -98,7 +98,7 @@ export abstract class BaseSchema<
           this.undefinedNotAllowedMessage ||
             DefaultErrorMessagesManager.getDefaultMessages().base
               ?.isUndefined ||
-            "Input is not defined",
+            "Input is required",
         ],
       } as RejectedValueValidationResult;
     }
@@ -109,7 +109,7 @@ export abstract class BaseSchema<
         messagesTree: [
           this.nullNotAllowedMessage ||
             DefaultErrorMessagesManager.getDefaultMessages().base?.isNull ||
-            "Input is null",
+            "Input cannot be null",
         ],
       } as RejectedValueValidationResult;
     }
