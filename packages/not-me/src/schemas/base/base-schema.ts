@@ -61,6 +61,13 @@ export abstract class BaseSchema<
     };
   }
 
+  protected addShapeFilter(filterFn: ShapeFilter<BaseType>["filterFn"]): void {
+    this.shapeFilters.push({
+      type: FilterType.Shape,
+      filterFn,
+    });
+  }
+
   validate(
     input: unknown,
     options?: ValidationOptions
@@ -181,7 +188,7 @@ export abstract class BaseSchema<
   }
 
   required(message?: string): Schema<Exclude<_Output, undefined>> {
-    this.addTestFilter((value: unknown) => {
+    this.test((value: unknown) => {
       if (value === undefined) {
         return message ?? "Input is required";
       } else {
@@ -193,33 +200,11 @@ export abstract class BaseSchema<
     return this as any;
   }
 
-  protected addShapeFilter(filterFn: ShapeFilter<BaseType>["filterFn"]): void {
-    this.shapeFilters.push({
-      type: FilterType.Shape,
-      filterFn,
-    });
-  }
-
-  private addTestFilter(
-    filterFn: (value: InferType<this>) => null | string
-  ): void {
+  test(testFunction: (value: _Output) => null | string): this {
     this.otherFilters.push({
       type: FilterType.Test,
-      filterFn,
+      filterFn: testFunction,
     });
-  }
-
-  private addTransformFilter(
-    filterFn: TransformFilter<InferType<this>, unknown>["filterFn"]
-  ): void {
-    this.otherFilters.push({
-      type: FilterType.Transform,
-      filterFn,
-    });
-  }
-
-  test(testFunction: (value: _Output) => null | string): this {
-    this.addTestFilter(testFunction);
 
     return this;
   }
@@ -227,7 +212,10 @@ export abstract class BaseSchema<
   transform<TransformFunction extends (value: _Output) => unknown>(
     transformFunction: TransformFunction
   ): Schema<ReturnType<TransformFunction>> {
-    this.addTransformFilter(transformFunction);
+    this.otherFilters.push({
+      type: FilterType.Transform,
+      filterFn: transformFunction,
+    });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
     return this as any;
