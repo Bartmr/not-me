@@ -49,13 +49,10 @@ describe("Base Schema", () => {
   it("Schemas that call required() should stop the value from continuing the validation chain", () => {
     const lastTransform = jest.fn();
 
-    const schema = number()
-      .integer()
-      .required()
-      .test(lastTransform);
+    const schema = number().integer().required().test(lastTransform);
 
-    schema.validate(undefined, { abortEarly: false })
+    schema.validate(undefined, { abortEarly: false });
 
-    expect(lastTransform).not.toHaveBeenCalled()
+    expect(lastTransform).not.toHaveBeenCalled();
   });
 });
