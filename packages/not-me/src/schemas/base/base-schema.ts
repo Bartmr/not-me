@@ -221,8 +221,7 @@ export abstract class BaseSchema<
   test(testFunction: (value: _Output) => null | string): this {
     this.addTestFilter(testFunction);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
-    return this as any;
+    return this;
   }
 
   transform<TransformFunction extends (value: _Output) => unknown>(
