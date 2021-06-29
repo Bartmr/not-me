@@ -119,7 +119,8 @@ const schema = object({
 - **`Schema<T>`**: dictates that a value is a schema that has an output type of `T`
 
 ### Validation options
-- `abortEarly`: stop validation when the first invalid field is found. Default is `true` when running in *NodeJS*, to avoid performance issues.
+
+- `abortEarly`: stop validation when the first invalid field is found. Default is `true` when running in _NodeJS_, to avoid performance issues.
 
 ### Creating a schema of my own:
 
@@ -134,8 +135,8 @@ class IntegerSchema extends NumberSchema {
   constructor(message?: string) {
     super();
 
-    this.test(
-      (input) => Number.isInteger(input) ? null : "Input must be an integer",
+    this.test((input) =>
+      Number.isInteger(input) ? null : "Input must be an integer"
     );
   }
 }
@@ -148,118 +149,6 @@ export function integer(message?: string) {
   return new IntegerSchema(message);
 }
 ```
-
-### Library resolvers / adapters:
-
-This package includes validation resolvers to work with the following libraries / frameworks:
-
-- [Formik](#formik)
-- [React Hook Form](#rhf)
-- [Nest](#nest)
-
-#### <a name="formik"></a> Formik
-
-```
-$ npm install not-me-resolver-formik
-```
-
-```tsx
-import { formikResolver } from "not-me-resolver-formik";
-
-// (...)
-
-<Formik /* (...) */ validate={formikResolver(notMeSchema)}>
-  {/* (...) */}
-</Formik>;
-```
-
-If you plan on doing a custom `validate` function, `not-me-resolver-formik` also exports `messagesTreeToFormikErrors`, which transforms _Not-Me_ error message trees into _Formik_ errors.
-
-#### <a name="rhf"></a> React Hook Form
-
-```
-$ npm install not-me-resolver-react-hook-form
-```
-
-```tsx
-import { rhfResolver } from "not-me-resolver-react-hook-form";
-
-// (...)
-
-const resolver = rhfResolver(notMeSchema);
-const { handleSubmit, register } = useForm({ resolver });
-
-```
-
-#### <a name="nest"></a> Nest
-
-By integrating this resolver with your NestJS project, parameters annotated with `@Param`, `@Query` and `@Body` will be validated by `not-me`. The parameters need to be typed as **ES6 classes** and annotated with the `@ValidationSchema` decorator, in order to get the validation schema working throught reflection.
-
-```
-$ npm install not-me-resolver-nestjs
-```
-
-- `app.ts`
-
-  ```typescript
-  import { Module, OnApplicationShutdown } from "@nestjs/common";
-  import { APP_PIPE } from "@nestjs/core";
-  import { NotMeValidationPipe } from "not-me-resolver-nestjs";
-
-  @Module({
-    providers: [
-      {
-        provide: APP_PIPE,
-        useClass: NotMeValidationPipe,
-      },
-    ],
-  })
-  export class AppModule {}
-  ```
-  
-- `any-data.dto.ts`
-
-  > Tie both the DTO class and the schema type by either **typing the schema with the DTO class** or **implementing the schema's inferred type**
-
-  - **Typing the schema with the DTO class**
-
-    > **(RECOMMENDED) The schema is allowed to have more properties** than the class. This method guarantees that all values specified in the class are present the final validated object. When using this method, **the class should be the first place you go to add, change or remove properties**.
-
-    ```typescript
-    import { object } from "not-me/lib/schemas/object/object-schema";
-    import { string } from "not-me/lib/schemas/string/string-schema";
-    import { Schema } from "not-me/lib/schemas/schema";
-    import { ValidationSchema } from "not-me-resolver-nestjs";
-
-    const schema: Schema<AnyDataDTO> = object({
-      field: string().required(),
-    });
-
-    @ValidationSchema(schema)
-    export class AnyDataDTO {
-      field: string;
-    }
-    ```
-
-  - **Implementing the schema's inferred type**
-
-    > Some use cases might require **the class to have more properties** than the schema. In those cases, we recommend **implementing the schema's inferred type**. When using this method, **the schema should be the first place you go to add, change or remove properties**.
-
-    ```typescript
-    import { object } from "not-me/lib/schemas/object/object-schema";
-    import { string } from "not-me/lib/schemas/string/string-schema";
-    import { InferType } from "not-me/lib/schemas/schema";
-    import { ValidationSchema } from "not-me-resolver-nestjs";
-
-    const schema = object({
-      field: string().required(),
-    });
-
-    @ValidationSchema(schema)
-    export class AnyDataDTO implements InferType<typeof schema> {
-      field: string;
-    }
-    ```
 
 ### How it works under the hood:
 
