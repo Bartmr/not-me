@@ -7,8 +7,8 @@ import { ValidationSchema } from "./validation-schema.decorator";
 import { NotMeValidationPipe } from "./validation.pipe";
 
 const schema: Schema<DTO> = object({
-  a: number().defined(),
-}).defined();
+  a: number().required(),
+}).required();
 
 @ValidationSchema(schema)
 class DTO {

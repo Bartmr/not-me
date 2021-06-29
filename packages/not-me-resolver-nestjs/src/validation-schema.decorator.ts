@@ -11,7 +11,7 @@ export const VALIDATION_SCHEMA_KEY = "not-me-validation-schema";
 export type SupportedValidationSchema = Schema<object>;
 
 /**
- * Schema must be an array or an object marked with .defined().
+ * Schema must be an array or an object marked with .required().
  *
  * NestJS parsers always parse everything out of the request as an object literal.
  * Even when the query parameters or bodies are undefined.
