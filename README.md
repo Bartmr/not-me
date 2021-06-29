@@ -69,19 +69,13 @@ With these basic blocks, you can build more complex validations, by chaining...
 
 - `test((v) => <condition> ? null : "Error message")` - will validate if your value matches a condition. If it does, return `null`. If it doesn't match the condition, return a `string` with the error message you want to return.
 - `transform((v) => <transform input value into any other value>)` - will allow you to modify the input value
-- `defined()` - sets the schema to reject `undefined` values
-- `nullable()` - sets the schema to accept `null` values
+- `required()` - sets the schema to reject `undefined` values
 
 The methods above are all inherited from the `base()` schema. Other schemas might provide their own helpful methods, like `string()` provides `string().filled()`, a method that makes sure the field is filled not just with blank spaces.
 
-Typescript will guide you in the recommended order by which you should chain validations. But if you use pure Javascript, we recommend you to chain schemas in this order:
+Typescript will guide you in the recommended order by which you should chain validations.
 
-- Type validations (like `number()`, `string()`, etc...)
-- Schema specific validations (like `filled()`, `union()`, etc...)
-- Nullability validations (`defined()` and `nullable()`)
-- Test and Transform validations (`test()` and `transform()`)
-
-If you follow what auto-complete presents to you, you should be fine.
+If you follow what auto-complete presents to you, you will be fine.
 
 ### Error messages:
 
@@ -100,23 +94,23 @@ You can also customize the default error messages by using the `DefaultErrorMess
   instead of a generic value like `string`
 */
 const schema = object({
-  common: equals(["common"]).defined(),
-  a: equals(["a", "b"] as const).defined(),
+  common: equals(["common"]).required(),
+  a: equals(["a", "b"] as const).required(),
 })
   .union((v) => {
     if (v.a === "a") {
       return {
-        a: equals(["a"] as const).defined(),
-        c: equals([0]).defined(),
+        a: equals(["a"] as const).required(),
+        c: equals([0]).required(),
       };
     } else {
       return {
-        a: equals(["b"] as const).defined(),
-        d: equals([false]).defined(),
+        a: equals(["b"] as const).required(),
+        d: equals([false]).required(),
       };
     }
   })
-  .defined();
+  .required();
 ```
 
 ### Type utilities (at `not-me/lib/schemas/schema`):
@@ -238,7 +232,7 @@ $ npm install not-me-resolver-nestjs
     import { ValidationSchema } from "not-me-resolver-nestjs";
 
     const schema: Schema<AnyDataDTO> = object({
-      field: string().defined(),
+      field: string().required(),
     });
 
     @ValidationSchema(schema)
@@ -258,7 +252,7 @@ $ npm install not-me-resolver-nestjs
     import { ValidationSchema } from "not-me-resolver-nestjs";
 
     const schema = object({
-      field: string().defined(),
+      field: string().required(),
     });
 
     @ValidationSchema(schema)
@@ -271,7 +265,6 @@ $ npm install not-me-resolver-nestjs
 
 When you set up a schema, you're just pilling up filter functions that will test and transform your initial value. These are the types of filters that are called during validation, by this order:
 
-- **Nullability checks** will check if the value is `undefined` or `null` and whether or not they're allowed
 - **Type filter** will validate if your input is in a specific type (example: a number, an object, an array, etc...)
 - **Shape filters** will validate the fields in your value. This only applies to object and array values
 - **Test and Transform filters** will run basic _true_ or _false_ checks on your value, or transform your value.
