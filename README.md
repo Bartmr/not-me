@@ -119,7 +119,8 @@ const schema = object({
 - **`Schema<T>`**: dictates that a value is a schema that has an output type of `T`
 
 ### Validation options
-- `abortEarly`: stop validation when the first invalid field is found. Default is `true` when running in *NodeJS*, to avoid performance issues.
+
+- `abortEarly`: stop validation when the first invalid field is found. Default is `true` when running in _NodeJS_, to avoid performance issues.
 
 ### Creating a schema of my own:
 
@@ -134,8 +135,8 @@ class IntegerSchema extends NumberSchema {
   constructor(message?: string) {
     super();
 
-    this.test(
-      (input) => Number.isInteger(input) ? null : "Input must be an integer",
+    this.test((input) =>
+      Number.isInteger(input) ? null : "Input must be an integer"
     );
   }
 }
