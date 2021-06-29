@@ -26,8 +26,9 @@
     "lint": "npm run eslint -- --fix",
     "lint:no-fix": "npm run eslint",
     "precommit": "lint-staged && npm run typecheck && npm run lint:no-fix",
-    "update-all-dependencies": "npm-check-updates -u && rimraf package-lock.json && npm install",
-    "prepublishOnly": "npm run test && npm run build"
+    "update-all-dependencies": "npm-check-updates -u && rimraf package-lock.json node_modules && npm install",
+    "prepublishOnly": "npm run test && npm run build",
+    "reset-repository": "git clean -Xdf"
   },
   "author": "Bartolomeu Rodrigues",
   "license": "MIT",
