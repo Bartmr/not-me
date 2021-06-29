@@ -13,7 +13,7 @@
   "scripts": {
     "build": "npm run clean && tsc --project tsconfig.release.json && node scripts/bundle-declaration-references.js",
     "build:watch": "tsc --project tsconfig.watch.json --watch",
-    "clean": "rimraf lib README.md",
+    "clean": "rimraf lib",
     "typecheck": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -27,8 +27,7 @@
     "lint:no-fix": "npm run eslint",
     "precommit": "lint-staged && npm run typecheck && npm run lint:no-fix",
     "update-all-dependencies": "npm-check-updates -u && rimraf package-lock.json && npm install",
-    "bundle-readme": "cp ../../README.md README.md",
-    "prepublishOnly": "npm run test && npm run build && npm run bundle-readme"
+    "prepublishOnly": "npm run test && npm run build"
   },
   "author": "Bartolomeu Rodrigues",
   "license": "MIT",
