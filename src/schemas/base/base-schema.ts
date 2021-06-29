@@ -12,6 +12,7 @@ enum FilterType {
   Shape = "shape",
   Test = "test",
   Transform = "transform",
+  UndefinedCatching = "undefined-catching",
 }
 
 type BaseTypeFilter<BaseType> = {
@@ -37,6 +38,11 @@ type TransformFilter<V, R> = {
   filterFn: (value: V) => R;
 };
 
+type UndefinedCatchingFilter = {
+  type: FilterType.UndefinedCatching;
+  message: string;
+};
+
 export abstract class BaseSchema<
   BaseType,
   Shape extends BaseType = BaseType,
@@ -49,7 +55,9 @@ export abstract class BaseSchema<
   private baseTypeFilter: BaseTypeFilter<BaseType>;
   private shapeFilters: ShapeFilter<BaseType>[] = [];
   private otherFilters: Array<
-    TestFilter<InferType<this>> | TransformFilter<InferType<this>, unknown>
+    | TestFilter<InferType<this>>
+    | TransformFilter<InferType<this>, unknown>
+    | UndefinedCatchingFilter
   > = [];
 
   protected mapMode?: boolean;
@@ -169,8 +177,20 @@ export abstract class BaseSchema<
             continue;
           }
         }
-      } else {
+      } else if (filter.type === FilterType.Transform) {
         _currentValue = filter.filterFn(_currentValue as InferType<this>);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      } else if (filter.type === FilterType.UndefinedCatching) {
+        if (_currentValue === undefined) {
+          return {
+            errors: true,
+            messagesTree: [filter.message],
+          };
+        }
+
+        continue;
+      } else {
+        throw new Error();
       }
     }
 
@@ -188,12 +208,9 @@ export abstract class BaseSchema<
   }
 
   required(message?: string): Schema<Exclude<_Output, undefined>> {
-    this.test((value: unknown) => {
-      if (value === undefined) {
-        return message ?? "Input is required";
-      } else {
-        return null;
-      }
+    this.otherFilters.push({
+      type: FilterType.UndefinedCatching,
+      message: message ?? "Input is required",
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
