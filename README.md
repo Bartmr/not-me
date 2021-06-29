@@ -62,11 +62,12 @@ This library offers the following basic types for you to build more complex vali
 - `object({ property: schemaForTheProperty })`
 - `objectOf(schemaForAllProperties)` - same as `object()` but for objects whose keys can be any string
 - `string()`
+- `null()`
 - `or([...schemas])` - the value is filtered by multiple schemas till one matches. It's the equivalent to an _union type_
 
 With these basic blocks, you can build more complex validations, by chaining...
 
-- `test((v) => <condition>)` - will validate if your value matches a condition
+- `test((v) => <condition> ? null : "Error message")` - will validate if your value matches a condition. If it does, return `null`. If it doesn't match the condition, return a `string` with the error message you want to return.
 - `transform((v) => <transform input value into any other value>)` - will allow you to modify the input value
 - `defined()` - sets the schema to reject `undefined` values
 - `nullable()` - sets the schema to accept `null` values
@@ -140,8 +141,7 @@ class IntegerSchema extends NumberSchema {
     super();
 
     this.test(
-      (input) => Number.isInteger(input),
-      message || "Input is not an integer"
+      (input) => Number.isInteger(input) ? null : "Input must be an integer",
     );
   }
 }
