@@ -34,12 +34,13 @@ export class NumberSchema extends BaseSchema<number> {
   }
 
   integer(message?: string): this {
-    this.test(
-      (input) => Number.isInteger(input),
-      () =>
-        message ||
-        DefaultErrorMessagesManager.getDefaultMessages().number?.isNotInteger ||
-        "Input must be an integer"
+    this.test((input) =>
+      Number.isInteger(input)
+        ? null
+        : message ||
+          DefaultErrorMessagesManager.getDefaultMessages().number
+            ?.isNotInteger ||
+          "Input must be an integer"
     );
 
     return this;

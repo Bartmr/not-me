@@ -40,7 +40,8 @@ export class ObjectSchema<
     value: BaseType,
     options: ValidationOptions
   ): ValidationResult<{ [key: string]: unknown }> {
-    const finalValue: BaseType = {};
+    const _value = value as { [key: string]: unknown };
+    const finalValue: { [key: string]: unknown } = {};
 
     const errorsFieldsErrorMessages: {
       [key: string]: AnyErrorMessagesTree;
@@ -51,7 +52,7 @@ export class ObjectSchema<
 
       if (fieldSchema === undefined) continue;
 
-      const fieldResult = fieldSchema.validate(value[fieldKey], options);
+      const fieldResult = fieldSchema.validate(_value[fieldKey], options);
 
       if (fieldResult.errors) {
         if (options?.abortEarly) {

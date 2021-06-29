@@ -7,8 +7,10 @@ type ElementsSchemaBase = Schema<unknown>;
 type BaseType = unknown[];
 
 export class ArraySchema<
-  ElementsSchema extends ElementsSchemaBase
-> extends BaseSchema<BaseType, InferType<ElementsSchema>[]> {
+  ElementsSchema extends ElementsSchemaBase,
+  _Shape extends InferType<ElementsSchema>[] = InferType<ElementsSchema>[],
+  _Output = _Shape | undefined
+> extends BaseSchema<BaseType, _Shape, _Output> {
   private minLength = 0;
   private minLengthMessage?: string;
 
@@ -40,19 +42,22 @@ export class ArraySchema<
 
       const validatedArray = [];
 
-      const lessThanMinimumDefaultMessage = DefaultErrorMessagesManager.getDefaultMessages().array
-      ?.lessThanMinimum
+      const lessThanMinimumDefaultMessage = DefaultErrorMessagesManager.getDefaultMessages()
+        .array?.lessThanMinimum;
 
-      const moreThanMaximumDefaultMessage = DefaultErrorMessagesManager.getDefaultMessages().array
-      ?.moreThanMaximum
+      const moreThanMaximumDefaultMessage = DefaultErrorMessagesManager.getDefaultMessages()
+        .array?.moreThanMaximum;
 
       if (input.length < this.minLength) {
         return {
           errors: true,
           messagesTree: [
             this.minLengthMessage ||
-              (lessThanMinimumDefaultMessage && lessThanMinimumDefaultMessage(this.minLength)) ||
-              `Must have more than ${this.minLength} item${this.minLength === 1 ? '' : 's'}`,
+              (lessThanMinimumDefaultMessage &&
+                lessThanMinimumDefaultMessage(this.minLength)) ||
+              `Must have more than ${this.minLength} item${
+                this.minLength === 1 ? "" : "s"
+              }`,
           ],
         };
       } else if (input.length > this.maxLength) {
@@ -60,8 +65,11 @@ export class ArraySchema<
           errors: true,
           messagesTree: [
             this.maxLengthMessage ||
-            (moreThanMaximumDefaultMessage && moreThanMaximumDefaultMessage(this.maxLength)) ||
-              `Must have less than ${this.maxLength} item${this.maxLength === 1 ? '' : 's'}`,
+              (moreThanMaximumDefaultMessage &&
+                moreThanMaximumDefaultMessage(this.maxLength)) ||
+              `Must have less than ${this.maxLength} item${
+                this.maxLength === 1 ? "" : "s"
+              }`,
           ],
         };
       }
@@ -101,15 +109,13 @@ export class ArraySchema<
     });
   }
 
-  wrapIfNotAnArray(): this {
+  wrapIfNotAnArray(): ArraySchema<Schema<unknown>, _Shape, _Shape> {
     this.wrapValueBeforeValidation = (input): undefined | null | unknown[] => {
       if (input instanceof Array) {
         return input as unknown[];
       } else {
         if (input === undefined) {
-          return this.allowUndefined ? input : [];
-        } else if (input === null) {
-          return this.allowNull ? input : [input];
+          return [];
         } else {
           return [input];
         }

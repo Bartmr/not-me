@@ -3,7 +3,7 @@ import { number } from "./number-schema";
 
 describe("Number Schema", () => {
   it("Fail with unparsable number string", () => {
-    const schema: Schema<number> = number().defined();
+    const schema: Schema<number> = number().required();
 
     expect(schema.validate("abc")).toEqual({
       errors: true,
@@ -12,7 +12,7 @@ describe("Number Schema", () => {
   });
 
   it("Parsable number string", () => {
-    const schema: Schema<number> = number().defined();
+    const schema: Schema<number> = number().required();
 
     expect(schema.validate("123.3")).toEqual({
       errors: false,

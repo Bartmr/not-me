@@ -6,7 +6,7 @@ import { array } from "./array-schema";
 
 describe("Array Schema", () => {
   const objSchema: Schema<{ [key: string]: "a" | "b" } | undefined> = objectOf(
-    equals(["a", "b"] as const).defined()
+    equals(["a", "b"] as const).required()
   );
 
   const arraySchema = array(objSchema);
@@ -30,7 +30,7 @@ describe("Array Schema", () => {
   it("Should fail when input is not an array", () => {
     expect(schema.validate(null)).toEqual({
       errors: true,
-      messagesTree: ["Input cannot be null"],
+      messagesTree: ["Input must be an array"],
     });
   });
 
@@ -60,9 +60,9 @@ describe("Array Schema", () => {
   });
 
   it("Should transform undefined into empty array", () => {
-    const schema: Schema<string[]> = array(string().defined())
+    const schema: Schema<string[]> = array(string().required())
       .wrapIfNotAnArray()
-      .defined();
+      .required();
 
     const result = schema.validate(undefined);
 
@@ -73,9 +73,9 @@ describe("Array Schema", () => {
   });
 
   it("Should wrap string value in an array", () => {
-    const schema: Schema<string[]> = array(string().defined())
+    const schema: Schema<string[]> = array(string().required())
       .wrapIfNotAnArray()
-      .defined();
+      .required();
 
     const result = schema.validate("hello");
 
@@ -86,17 +86,15 @@ describe("Array Schema", () => {
   });
 
   it("Should wrap null in an array", () => {
-    const schema: Schema<null[]> = array(equals([null]).defined())
-      .wrapIfNotAnArray()
-      .defined();
+    const schema: Schema<null[]> = array(
+      equals([null]).required()
+    ).wrapIfNotAnArray();
 
     const result = schema.validate(null);
 
     expect(result).toEqual({
-      errors: true,
-      messagesTree: {
-        "0": [expect.any(String) as unknown],
-      },
+      errors: false,
+      value: [null],
     });
   });
 });

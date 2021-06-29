@@ -1,13 +1,12 @@
 import { BaseSchema } from "../base/base-schema";
 import { InferType, Schema } from "../schema";
 import { AnyErrorMessagesTree } from "../../error-messages/error-messages-tree";
-import { NullableTypes } from "../../utils/types/nullable-types";
 
 type ValuesSchemasBase = [Schema<unknown>, ...Array<Schema<unknown>>];
 
 export class OrSchema<
   ValuesSchemas extends ValuesSchemasBase
-> extends BaseSchema<Exclude<InferType<ValuesSchemas[number]>, NullableTypes>> {
+> extends BaseSchema<InferType<ValuesSchemas[number]>> {
   constructor(valuesSchemas: ValuesSchemas) {
     if (valuesSchemas.length === 0) {
       throw new Error("No schemas provided");

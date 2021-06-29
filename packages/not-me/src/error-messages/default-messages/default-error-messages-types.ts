@@ -1,4 +1,3 @@
-
 export type DefaultErrorMessages = Partial<{
   object: Partial<{
     notAnObject: string;
@@ -29,5 +28,8 @@ export type DefaultErrorMessages = Partial<{
   }>;
   boolean: Partial<{
     notABoolean: string;
+  }>;
+  null: Partial<{
+    notNull: string;
   }>;
 }>;

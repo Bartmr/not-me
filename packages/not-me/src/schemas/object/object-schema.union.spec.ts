@@ -7,23 +7,23 @@ describe("Object Schema - Union", () => {
     const schema: Schema<
       { common: string } & ({ a: "a"; c: number } | { a: "b"; d: boolean })
     > = object({
-      common: equals(["common"]).defined(),
-      a: equals(["a", "b"] as const).defined(),
+      common: equals(["common"]).required(),
+      a: equals(["a", "b"] as const).required(),
     })
       .union((v) => {
         if (v.a === "a") {
           return {
-            a: equals(["a"] as const).defined(),
-            c: equals([0]).defined(),
+            a: equals(["a"] as const).required(),
+            c: equals([0]).required(),
           };
         } else {
           return {
-            a: equals(["b"] as const).defined(),
-            d: equals([false]).defined(),
+            a: equals(["b"] as const).required(),
+            d: equals([false]).required(),
           };
         }
       })
-      .defined();
+      .required();
 
     it("valid", () => {
       type Expected = InferType<typeof schema>;

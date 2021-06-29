@@ -31,7 +31,7 @@ describe("Object Schema", () => {
 
   it("Should fail with non-defined object input", () => {
     const schema = object({
-      a: object({ b: object({}) }).defined(),
+      a: object({ b: object({}) }).required(),
     });
 
     const result = schema.validate({});
@@ -44,7 +44,7 @@ describe("Object Schema", () => {
 
   it("Should fail with an invalid property", () => {
     const schema = object({
-      a: string().defined(),
+      a: string().required(),
     });
 
     const result = schema.validate({ a: true });
@@ -56,7 +56,7 @@ describe("Object Schema", () => {
   });
 
   it("empty schema - empty object - pass", () => {
-    const schema = object({}).defined();
+    const schema = object({}).required();
 
     const result: ValidationResult<{}> = schema.validate({});
 
@@ -67,7 +67,7 @@ describe("Object Schema", () => {
   });
 
   it("strip unknown fields", () => {
-    const schema = object({ a: equals(["a"] as const).defined() }).defined();
+    const schema = object({ a: equals(["a"] as const).required() }).required();
 
     const result: ValidationResult<{ a: "a" }> = schema.validate({
       a: "a",

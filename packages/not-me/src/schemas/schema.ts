@@ -22,13 +22,11 @@ export type Schema<Output> = {
     input: unknown,
     options?: ValidationOptions
   ): ValidationResult<Output>;
-  test(
-    testFunction: (value: Output) => boolean,
-    message: string | (() => string)
-  ): Schema<Output>;
+  test(testFunction: (value: Output) => null | string): Schema<Output>;
   transform<TransformFunction extends (value: Output) => unknown>(
     transformFunction: TransformFunction
   ): Schema<ReturnType<TransformFunction>>;
+  required(message?: string): Schema<Exclude<Output, undefined>>;
 };
 
 export type InferType<S extends Schema<unknown>> = S["_outputType"];

@@ -1,15 +1,9 @@
-import { DefaultErrorMessagesManager } from "../../error-messages/default-messages/default-error-messages-manager";
 import { throwError } from "../../utils/throw-error";
-import {
-  DefaultNullableTypes,
-  NullableTypes,
-} from "../../utils/types/nullable-types";
 import {
   ValidationResult,
   Schema,
   ValidationOptions,
   AcceptedValueValidationResult,
-  RejectedValueValidationResult,
   InferType,
 } from "../schema";
 
@@ -35,8 +29,7 @@ type ShapeFilter<Type> = {
 
 type TestFilter<V> = {
   type: FilterType.Test;
-  filterFn: (value: V) => boolean;
-  getMessage: () => string;
+  filterFn: (value: V) => null | string;
 };
 
 type TransformFilter<V, R> = {
@@ -47,10 +40,9 @@ type TransformFilter<V, R> = {
 export abstract class BaseSchema<
   BaseType,
   Shape extends BaseType = BaseType,
-  NT extends NullableTypes = DefaultNullableTypes
-> implements Schema<Shape | NT> {
-  _outputType!: Shape | NT;
-  _nullableTypes!: NT;
+  _Output = Shape | undefined
+> implements Schema<_Output> {
+  _outputType!: _Output;
 
   protected wrapValueBeforeValidation?: (input: unknown) => unknown;
 
@@ -59,12 +51,6 @@ export abstract class BaseSchema<
   private otherFilters: Array<
     TestFilter<InferType<this>> | TransformFilter<InferType<this>, unknown>
   > = [];
-
-  protected allowNull = false;
-  private nullNotAllowedMessage?: string;
-
-  protected allowUndefined = true;
-  private undefinedNotAllowedMessage?: string;
 
   protected mapMode?: boolean;
 
@@ -78,7 +64,7 @@ export abstract class BaseSchema<
   validate(
     input: unknown,
     options?: ValidationOptions
-  ): ValidationResult<InferType<this>> {
+  ): ValidationResult<_Output> {
     const _options: ValidationOptions = {
       // Use typeof to avoid 'process is not defined' error
       abortEarly: typeof process === "undefined" ? false : true,
@@ -91,31 +77,7 @@ export abstract class BaseSchema<
       _currentValue = this.wrapValueBeforeValidation(_currentValue);
     }
 
-    if (_currentValue === undefined && !this.allowUndefined) {
-      return {
-        errors: true,
-        messagesTree: [
-          this.undefinedNotAllowedMessage ||
-            DefaultErrorMessagesManager.getDefaultMessages().base
-              ?.isUndefined ||
-            "Input is required",
-        ],
-      } as RejectedValueValidationResult;
-    }
-
-    if (_currentValue === null && !this.allowNull) {
-      return {
-        errors: true,
-        messagesTree: [
-          this.nullNotAllowedMessage ||
-            DefaultErrorMessagesManager.getDefaultMessages().base?.isNull ||
-            "Input cannot be null",
-        ],
-      } as RejectedValueValidationResult;
-    }
-
-    // Use loose equality operator '!=' to exclude null and undefined
-    if (_currentValue != null) {
+    if (_currentValue !== undefined) {
       /*
         BASE TYPE FILTER
       */
@@ -181,26 +143,24 @@ export abstract class BaseSchema<
     /*
       OTHER FILTERS
     */
-    let testFiltersErrors: string[] = [];
+    const testFiltersErrors: string[] = [];
 
     for (const filter of this.otherFilters) {
       if (filter.type === FilterType.Test) {
-        const valid = filter.filterFn(_currentValue as InferType<this>);
+        const result = filter.filterFn(_currentValue as InferType<this>);
 
-        if (!valid) {
-          const messages = [filter.getMessage()];
-
+        if (result === null) {
+          continue;
+        } else {
           if (_options.abortEarly) {
             return {
               errors: true,
-              messagesTree: messages,
+              messagesTree: [result],
             };
           } else {
-            testFiltersErrors = [...testFiltersErrors, ...messages];
+            testFiltersErrors.push(result);
             continue;
           }
-        } else {
-          continue;
         }
       } else {
         _currentValue = filter.filterFn(_currentValue as InferType<this>);
@@ -220,23 +180,14 @@ export abstract class BaseSchema<
     } as AcceptedValueValidationResult<InferType<this>>;
   }
 
-  setMessageForWhenNullIsRejected(message: string): this {
-    this.nullNotAllowedMessage = message;
-    return this;
-  }
-
-  nullable(): BaseSchema<BaseType, Shape, NT | null> {
-    this.allowNull = true;
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
-    return this as any;
-  }
-  defined(
-    message?: string
-  ): BaseSchema<BaseType, Shape, Exclude<NT, undefined>> {
-    this.allowUndefined = false;
-
-    this.undefinedNotAllowedMessage = message;
+  required(message?: string): Schema<Exclude<_Output, undefined>> {
+    this.addTestFilter((value: unknown) => {
+      if (value === undefined) {
+        return message ?? "Input is required";
+      } else {
+        return null;
+      }
+    });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
     return this as any;
@@ -250,13 +201,11 @@ export abstract class BaseSchema<
   }
 
   private addTestFilter(
-    filterFn: (value: InferType<this>) => boolean,
-    getMessage: () => string
+    filterFn: (value: InferType<this>) => null | string
   ): void {
     this.otherFilters.push({
       type: FilterType.Test,
       filterFn,
-      getMessage,
     });
   }
 
@@ -269,18 +218,14 @@ export abstract class BaseSchema<
     });
   }
 
-  test(
-    testFunction: (value: InferType<this>) => boolean,
-    message: string | (() => string)
-  ): Schema<InferType<this>> {
-    this.addTestFilter(
-      testFunction,
-      typeof message === "string" ? () => message : message
-    );
-    return this;
+  test(testFunction: (value: _Output) => null | string): this {
+    this.addTestFilter(testFunction);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
   }
 
-  transform<TransformFunction extends (value: InferType<this>) => unknown>(
+  transform<TransformFunction extends (value: _Output) => unknown>(
     transformFunction: TransformFunction
   ): Schema<ReturnType<TransformFunction>> {
     this.addTransformFilter(transformFunction);

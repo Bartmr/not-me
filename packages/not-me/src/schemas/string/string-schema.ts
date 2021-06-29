@@ -1,13 +1,7 @@
 import { DefaultErrorMessagesManager } from "../../error-messages/default-messages/default-error-messages-manager";
-import {
-  DefaultNullableTypes,
-  NullableTypes,
-} from "../../utils/types/nullable-types";
 import { BaseSchema } from "../base/base-schema";
 
-export class StringSchema<
-  NT extends NullableTypes = DefaultNullableTypes
-> extends BaseSchema<string, string, NT> {
+export class StringSchema extends BaseSchema<string, string> {
   constructor(message?: string) {
     super((input) => {
       if (typeof input === "string") {
@@ -34,23 +28,16 @@ export class StringSchema<
   /**
    * Input must have any character other than spaces
    */
-  filled(message?: string): StringSchema<never> {
-    this.test(
-      (input) => {
-        if (!input) {
-          return false;
-        }
-
-        return input.trim().length > 0;
-      },
-      () =>
-        message ||
-        DefaultErrorMessagesManager.getDefaultMessages().string?.notAString ||
-        "Input must be filled"
-    );
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
-    return this as any;
+  filled(message?: string): StringSchema {
+    return this.test((input) => {
+      if (input === undefined) {
+        return null;
+      } else {
+        return input.trim().length > 0
+          ? null
+          : message ?? "Input must be filled";
+      }
+    });
   }
 }
 

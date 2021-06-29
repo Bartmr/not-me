@@ -3,7 +3,7 @@ import { date } from "./date-schema";
 
 describe("Date Schema", () => {
   it("Fail with unparsable date string", () => {
-    const schema: Schema<Date> = date().defined();
+    const schema: Schema<Date> = date().required();
 
     expect(schema.validate("abc")).toEqual({
       errors: true,
@@ -12,7 +12,7 @@ describe("Date Schema", () => {
   });
 
   it("Parsable date string", () => {
-    const schema: Schema<Date> = date().defined();
+    const schema: Schema<Date> = date().required();
 
     const dateInput = new Date();
 

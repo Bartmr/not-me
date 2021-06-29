@@ -8,7 +8,7 @@ describe("Or Schema", () => {
     const schema: Schema<number | "string-literal"> = or([
       number(),
       equals(["string-literal"] as const),
-    ]).defined();
+    ]).required();
 
     const resultForNumber = schema.validate(2);
     const resultForStringNumber = schema.validate("2");
@@ -34,7 +34,7 @@ describe("Or Schema", () => {
     const schema: Schema<number | "string-literal"> = or([
       number(),
       equals(["string-literal"] as const),
-    ]).defined();
+    ]).required();
 
     const result = schema.validate("hello");
 

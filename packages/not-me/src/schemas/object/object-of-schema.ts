@@ -12,11 +12,12 @@ export class ObjectOfSchema<
     super((input) => objectTypeFilter(input, message));
 
     this.addShapeFilter((input, options) => {
+      const _input = input as { [key: string]: unknown };
       const finalValue: { [key: string]: unknown } = {};
       const errors: { [key: string]: AnyErrorMessagesTree } = {};
 
-      for (const fieldKey in input) {
-        const fieldValue = input[fieldKey];
+      for (const fieldKey in _input) {
+        const fieldValue = _input[fieldKey];
 
         const result = fieldsSchema.validate(fieldValue, options);
 

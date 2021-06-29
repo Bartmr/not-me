@@ -1,26 +1,25 @@
+import { Schema } from "../schema";
 import { equals } from "./equals-schema";
 
 describe("Equals Schema", () => {
   it("Should accept input when it matches allowed values", () => {
-    const schema = equals(["a"] as const)
-      .nullable()
-      .defined();
+    const schema = equals(["a"] as const).required();
 
-    const result = schema.validate(null);
+    const result = schema.validate("a");
 
     if (result.errors) {
       throw new Error();
     } else {
-      const value: "a" | null = result.value;
+      const value: "a" = result.value;
 
       expect(value).toBe(value);
     }
   });
 
   it("Should reject input when it does not match allowed values", () => {
-    const schema = equals(["a", null] as const);
+    const schema: Schema<"a" | null> = equals(["a"] as const).required();
 
-    const result = schema.validate("b");
+    const result = schema.validate(null);
 
     expect(result).toEqual({
       errors: true,

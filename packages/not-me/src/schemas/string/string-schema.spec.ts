@@ -3,7 +3,7 @@ import { string } from "./string-schema";
 
 describe("String Schema", () => {
   it("Fail when value is not a string", () => {
-    const schema: Schema<string> = string().defined();
+    const schema: Schema<string> = string().required();
 
     expect(schema.validate({})).toEqual({
       errors: true,
@@ -12,7 +12,7 @@ describe("String Schema", () => {
   });
 
   it("Fail when it's not filled string", () => {
-    const schema: Schema<string> = string().filled();
+    const schema: Schema<string> = string().filled().required();
 
     expect(schema.validate("   ")).toEqual({
       errors: true,
