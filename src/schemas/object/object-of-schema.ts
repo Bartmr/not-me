@@ -5,9 +5,11 @@ import { BaseType, objectTypeFilter } from "./object-type-filter";
 
 type FieldsSchemaBase = Schema<unknown>;
 
-export class ObjectOfSchema<
-  FieldsSchema extends FieldsSchemaBase
-> extends BaseSchema<BaseType, { [key: string]: InferType<FieldsSchema> }> {
+abstract class ObjectOfSchemaImpl<
+  FieldsSchema extends FieldsSchemaBase,
+  _Shape = { [key: string]: InferType<FieldsSchema> },
+  _Output extends _Shape | undefined = _Shape | undefined
+> extends BaseSchema<BaseType, _Shape, _Output> {
   constructor(fieldsSchema: FieldsSchema, message?: string) {
     super((input) => objectTypeFilter(input, message));
 
@@ -50,7 +52,18 @@ export class ObjectOfSchema<
       }
     });
   }
+
+  required(message?: string): ObjectOfSchemaImpl<FieldsSchema, _Shape, _Shape> {
+    this.markAsRequiredInternally(message);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
+  }
 }
+
+export class ObjectOfSchema<
+  FieldsSchema extends FieldsSchemaBase
+> extends ObjectOfSchemaImpl<FieldsSchema> {}
 
 export function objectOf<FieldsSchema extends FieldsSchemaBase>(
   fieldsSchema: FieldsSchema,

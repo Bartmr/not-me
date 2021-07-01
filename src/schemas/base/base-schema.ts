@@ -207,15 +207,14 @@ export abstract class BaseSchema<
     } as AcceptedValueValidationResult<InferType<this>>;
   }
 
-  required(message?: string): Schema<Exclude<_Output, undefined>> {
+  protected markAsRequiredInternally(message?: string): void {
     this.otherFilters.push({
       type: FilterType.UndefinedCatching,
       message: message ?? "Input is required",
     });
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
-    return this as any;
   }
+
+  public abstract required(message?: string): Schema<Shape>;
 
   test(testFunction: (value: _Output) => null | string): this {
     this.otherFilters.push({

@@ -4,9 +4,11 @@ import { AnyErrorMessagesTree } from "../../error-messages/error-messages-tree";
 
 type ValuesSchemasBase = [Schema<unknown>, ...Array<Schema<unknown>>];
 
-export class OrSchema<
-  ValuesSchemas extends ValuesSchemasBase
-> extends BaseSchema<InferType<ValuesSchemas[number]>> {
+class OrSchemaImpl<
+  ValuesSchemas extends ValuesSchemasBase,
+  _Shape = InferType<ValuesSchemas[number]>,
+  _Output = _Shape | undefined
+> extends BaseSchema<_Shape, _Shape, _Output> {
   constructor(valuesSchemas: ValuesSchemas) {
     if (valuesSchemas.length === 0) {
       throw new Error("No schemas provided");
@@ -44,7 +46,24 @@ export class OrSchema<
       }
     });
   }
+
+  required(
+    message?: string
+  ): OrSchemaImpl<
+    ValuesSchemas,
+    Exclude<_Shape, undefined>,
+    Exclude<_Shape, undefined>
+  > {
+    this.markAsRequiredInternally(message);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
+  }
 }
+
+export class OrSchema<
+  ValuesSchemas extends ValuesSchemasBase
+> extends OrSchemaImpl<ValuesSchemas> {}
 
 export function or<ValuesSchemas extends ValuesSchemasBase>(
   valuesSchemas: ValuesSchemas

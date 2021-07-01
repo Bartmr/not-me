@@ -1,7 +1,11 @@
 import { DefaultErrorMessagesManager } from "../../error-messages/default-messages/default-error-messages-manager";
 import { BaseSchema } from "../base/base-schema";
 
-export class BooleanSchema extends BaseSchema<boolean> {
+class BooleanSchemaImpl<_Output = boolean | undefined> extends BaseSchema<
+  boolean,
+  boolean,
+  _Output
+> {
   constructor(message?: string) {
     super((input) => {
       if (typeof input === "boolean") {
@@ -29,7 +33,16 @@ export class BooleanSchema extends BaseSchema<boolean> {
       }
     });
   }
+
+  required(message?: string): BooleanSchemaImpl<boolean> {
+    this.markAsRequiredInternally(message);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
+  }
 }
+
+export class BooleanSchema extends BooleanSchemaImpl {}
 
 export function boolean(message?: string): BooleanSchema {
   return new BooleanSchema(message);

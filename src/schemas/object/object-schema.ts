@@ -16,9 +16,11 @@ type SchemaObjToShape<
     : never;
 };
 
-export class ObjectSchema<
-  SchemaObj extends { [key: string]: Schema<unknown> }
-> extends BaseSchema<BaseType, SchemaObjToShape<SchemaObj>> {
+class ObjectSchemaImpl<
+  SchemaObj extends { [key: string]: Schema<unknown> },
+  _Shape = SchemaObjToShape<SchemaObj>,
+  _Output = _Shape | undefined
+> extends BaseSchema<BaseType, _Shape, _Output> {
   constructor(schemaObj: SchemaObj, message?: string) {
     super((input) => {
       return objectTypeFilter(input, message);
@@ -89,7 +91,7 @@ export class ObjectSchema<
     ) => { [key: string]: Schema<unknown> | undefined }
   >(
     schemaFactory: SchemaFactory
-  ): ObjectSchema<
+  ): ObjectSchemaImpl<
     Omit<SchemaObj, keyof ReturnType<SchemaFactory>> & ReturnType<SchemaFactory>
   > {
     this.addShapeFilter((input, options) => {
@@ -111,7 +113,18 @@ export class ObjectSchema<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
     return this as any;
   }
+
+  required(message?: string): ObjectSchemaImpl<SchemaObj, _Shape, _Shape> {
+    this.markAsRequiredInternally(message);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
+  }
 }
+
+export class ObjectSchema<
+  SchemaObj extends { [key: string]: Schema<unknown> }
+> extends ObjectSchemaImpl<SchemaObj> {}
 
 export function object<SchemaObj extends { [key: string]: Schema<unknown> }>(
   schemaObj: SchemaObj,

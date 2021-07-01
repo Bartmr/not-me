@@ -1,5 +1,5 @@
 import { equals } from "../equals/equals-schema";
-import { ValidationResult } from "../schema";
+import { Schema, ValidationResult } from "../schema";
 import { string } from "../string/string-schema";
 import { object } from "./object-schema";
 
@@ -67,7 +67,9 @@ describe("Object Schema", () => {
   });
 
   it("strip unknown fields", () => {
-    const schema = object({ a: equals(["a"] as const).required() }).required();
+    const schema: Schema<{ a: "a" }> = object({
+      a: equals(["a"] as const).required(),
+    }).required();
 
     const result: ValidationResult<{ a: "a" }> = schema.validate({
       a: "a",

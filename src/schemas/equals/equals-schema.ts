@@ -1,9 +1,10 @@
 import { DefaultErrorMessagesManager } from "../../error-messages/default-messages/default-error-messages-manager";
 import { BaseSchema } from "../base/base-schema";
 
-export class EqualsSchema<
-  PossibleValues extends readonly unknown[]
-> extends BaseSchema<PossibleValues[number]> {
+class EqualsSchemaImpl<
+  PossibleValues extends readonly unknown[],
+  _Output = PossibleValues[number] | undefined
+> extends BaseSchema<PossibleValues[number], PossibleValues[number], _Output> {
   constructor(possibleValues: PossibleValues, message?: string) {
     super((input) => {
       if (possibleValues.includes(input)) {
@@ -24,7 +25,23 @@ export class EqualsSchema<
       }
     });
   }
+
+  required(
+    message?: string
+  ): EqualsSchemaImpl<
+    PossibleValues,
+    Exclude<PossibleValues[number], undefined>
+  > {
+    this.markAsRequiredInternally(message);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
+  }
 }
+
+export class EqualsSchema<
+  PossibleValues extends readonly unknown[]
+> extends EqualsSchemaImpl<PossibleValues> {}
 
 export function equals<PossibleValues extends readonly unknown[]>(
   possibleValues: PossibleValues,

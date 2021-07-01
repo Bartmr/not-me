@@ -6,7 +6,7 @@ import { InferType, Schema } from "../schema";
 type ElementsSchemaBase = Schema<unknown>;
 type BaseType = unknown[];
 
-export class ArraySchema<
+class ArraySchemaImpl<
   ElementsSchema extends ElementsSchemaBase,
   _Shape extends InferType<ElementsSchema>[] = InferType<ElementsSchema>[],
   _Output = _Shape | undefined
@@ -109,7 +109,14 @@ export class ArraySchema<
     });
   }
 
-  wrapIfNotAnArray(): ArraySchema<Schema<unknown>, _Shape, _Shape> {
+  required(message?: string): ArraySchemaImpl<ElementsSchema, _Shape, _Shape> {
+    this.markAsRequiredInternally(message);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
+  }
+
+  wrapIfNotAnArray(): ArraySchemaImpl<Schema<unknown>, _Shape, _Shape> {
     this.wrapValueBeforeValidation = (input): undefined | null | unknown[] => {
       if (input instanceof Array) {
         return input as unknown[];
@@ -140,6 +147,10 @@ export class ArraySchema<
     return this;
   }
 }
+
+export class ArraySchema<
+  ElementsSchema extends ElementsSchemaBase
+> extends ArraySchemaImpl<ElementsSchema> {}
 
 export function array<ElementsSchema extends ElementsSchemaBase>(
   elementsSchema: ElementsSchema,

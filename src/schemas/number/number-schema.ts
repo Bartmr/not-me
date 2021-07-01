@@ -1,7 +1,11 @@
 import { DefaultErrorMessagesManager } from "../../error-messages/default-messages/default-error-messages-manager";
 import { BaseSchema } from "../base/base-schema";
 
-export class NumberSchema extends BaseSchema<number> {
+class NumberSchemaImpl<_Output = number | undefined> extends BaseSchema<
+  number,
+  number,
+  _Output
+> {
   constructor(message?: string) {
     super((input) => {
       const typeErrorMessage = [
@@ -45,7 +49,16 @@ export class NumberSchema extends BaseSchema<number> {
 
     return this;
   }
+
+  required(message?: string): NumberSchemaImpl<number> {
+    this.markAsRequiredInternally(message);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
+  }
 }
+
+export class NumberSchema extends NumberSchemaImpl {}
 
 export function number(message?: string): NumberSchema {
   return new NumberSchema(message);

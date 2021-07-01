@@ -1,7 +1,11 @@
 import { DefaultErrorMessagesManager } from "../../error-messages/default-messages/default-error-messages-manager";
 import { BaseSchema } from "../base/base-schema";
 
-export class NullSchema extends BaseSchema<null> {
+class NullSchemaImpl<_Output = null | undefined> extends BaseSchema<
+  null,
+  null,
+  _Output
+> {
   constructor(message?: string) {
     super((input) => {
       const typeErrorMessage = [
@@ -23,7 +27,16 @@ export class NullSchema extends BaseSchema<null> {
       }
     });
   }
+
+  required(message?: string): NullSchemaImpl<null> {
+    this.markAsRequiredInternally(message);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
+  }
 }
+
+export class NullSchema extends NullSchemaImpl {}
 
 export function nullValue(message?: string): NullSchema {
   return new NullSchema(message);

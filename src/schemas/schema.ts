@@ -26,7 +26,6 @@ export type Schema<Output> = {
   transform<TransformFunction extends (value: Output) => unknown>(
     transformFunction: TransformFunction
   ): Schema<ReturnType<TransformFunction>>;
-  required(message?: string): Schema<Exclude<Output, undefined>>;
 };
 
 export type InferType<S extends Schema<unknown>> = S["_outputType"];
