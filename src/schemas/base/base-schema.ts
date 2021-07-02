@@ -207,7 +207,7 @@ export abstract class BaseSchema<
     } as AcceptedValueValidationResult<InferType<this>>;
   }
 
-  protected markAsRequiredInternally(message?: string): void {
+  protected markAsRequiredInternally(message: undefined | string): void {
     this.otherFilters.push({
       type: FilterType.UndefinedCatching,
       message: message ?? "Input is required",
