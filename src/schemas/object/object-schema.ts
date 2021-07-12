@@ -86,9 +86,9 @@ class ObjectSchemaImpl<
   }
 
   union<
-    SchemaFactory extends (
-      value: SchemaObjToShape<SchemaObj>
-    ) => { [key: string]: Schema<unknown> | undefined }
+    SchemaFactory extends (value: SchemaObjToShape<SchemaObj>) => {
+      [key: string]: Schema<unknown> | undefined;
+    }
   >(
     schemaFactory: SchemaFactory
   ): ObjectSchemaImpl<

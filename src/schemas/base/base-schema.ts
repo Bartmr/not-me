@@ -59,7 +59,8 @@ export abstract class BaseSchema<
   BaseType,
   Shape extends BaseType = BaseType,
   _Output = Shape | undefined | null
-> implements Schema<_Output> {
+> implements Schema<_Output>
+{
   _outputType!: _Output;
 
   protected wrapValueBeforeValidation?: (input: unknown) => unknown;

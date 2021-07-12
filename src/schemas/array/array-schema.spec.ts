@@ -5,15 +5,13 @@ import { string } from "../string/string-schema";
 import { array } from "./array-schema";
 
 describe("Array Schema", () => {
-  const objSchema: Schema<
-    { [key: string]: "a" | "b" } | undefined | null
-  > = objectOf(equals(["a", "b"] as const).required());
+  const objSchema: Schema<{ [key: string]: "a" | "b" } | undefined | null> =
+    objectOf(equals(["a", "b"] as const).required());
 
   const arraySchema = array(objSchema);
 
-  const schema: Schema<
-    Array<InferType<typeof objSchema>> | undefined | null
-  > = arraySchema;
+  const schema: Schema<Array<InferType<typeof objSchema>> | undefined | null> =
+    arraySchema;
 
   it("Should pass with correct values", () => {
     expect(schema.validate([undefined, undefined])).toEqual({
