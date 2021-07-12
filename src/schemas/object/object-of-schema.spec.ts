@@ -30,9 +30,8 @@ describe("Object Of Schema", () => {
   });
 
   it("is not an object", () => {
-    const result: ValidationResult<{ [key: string]: "a" }> = schema.validate(
-      true
-    );
+    const result: ValidationResult<{ [key: string]: "a" }> =
+      schema.validate(true);
 
     expect(result).toEqual({
       errors: true,

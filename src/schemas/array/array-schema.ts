@@ -42,11 +42,11 @@ class ArraySchemaImpl<
 
       const validatedArray = [];
 
-      const lessThanMinimumDefaultMessage = DefaultErrorMessagesManager.getDefaultMessages()
-        .array?.lessThanMinimum;
+      const lessThanMinimumDefaultMessage =
+        DefaultErrorMessagesManager.getDefaultMessages().array?.lessThanMinimum;
 
-      const moreThanMaximumDefaultMessage = DefaultErrorMessagesManager.getDefaultMessages()
-        .array?.moreThanMaximum;
+      const moreThanMaximumDefaultMessage =
+        DefaultErrorMessagesManager.getDefaultMessages().array?.moreThanMaximum;
 
       if (input.length < this.minLength) {
         return {

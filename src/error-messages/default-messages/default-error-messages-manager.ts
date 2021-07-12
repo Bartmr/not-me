@@ -16,4 +16,5 @@ class DefaultErrorMessagesManagerImpl {
   }
 }
 
-export const DefaultErrorMessagesManager = new DefaultErrorMessagesManagerImpl();
+export const DefaultErrorMessagesManager =
+  new DefaultErrorMessagesManagerImpl();
