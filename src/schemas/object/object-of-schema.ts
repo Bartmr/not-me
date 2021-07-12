@@ -8,7 +8,7 @@ type FieldsSchemaBase = Schema<unknown>;
 abstract class ObjectOfSchemaImpl<
   FieldsSchema extends FieldsSchemaBase,
   _Shape = { [key: string]: InferType<FieldsSchema> },
-  _Output extends _Shape | undefined = _Shape | undefined
+  _Output extends _Shape | undefined | null = _Shape | undefined | null
 > extends BaseSchema<BaseType, _Shape, _Output> {
   constructor(fieldsSchema: FieldsSchema, message?: string) {
     super((input) => objectTypeFilter(input, message));
@@ -55,6 +55,24 @@ abstract class ObjectOfSchemaImpl<
 
   required(message?: string): ObjectOfSchemaImpl<FieldsSchema, _Shape, _Shape> {
     this.markAsRequiredInternally(message);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
+  }
+
+  notNull(
+    message?: string
+  ): ObjectOfSchemaImpl<FieldsSchema, _Shape, Exclude<_Output, null>> {
+    this.markAsNotNullInternally(message);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
+  }
+
+  defined(
+    message?: string
+  ): ObjectOfSchemaImpl<FieldsSchema, _Shape, Exclude<_Output, undefined>> {
+    this.markAsDefinedInternally(message);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
     return this as any;

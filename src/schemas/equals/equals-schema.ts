@@ -3,7 +3,7 @@ import { BaseSchema } from "../base/base-schema";
 
 class EqualsSchemaImpl<
   PossibleValues extends readonly unknown[],
-  _Output = PossibleValues[number] | undefined
+  _Output = PossibleValues[number] | undefined | null
 > extends BaseSchema<PossibleValues[number], PossibleValues[number], _Output> {
   constructor(possibleValues: PossibleValues, message?: string) {
     super((input) => {
@@ -28,11 +28,26 @@ class EqualsSchemaImpl<
 
   required(
     message?: string
-  ): EqualsSchemaImpl<
-    PossibleValues,
-    Exclude<PossibleValues[number], undefined>
-  > {
+  ): EqualsSchemaImpl<PossibleValues, Exclude<_Output, undefined | null>> {
     this.markAsRequiredInternally(message);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
+  }
+
+  notNull(
+    message?: string
+  ): EqualsSchemaImpl<PossibleValues, Exclude<_Output, null>> {
+    this.markAsNotNullInternally(message);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
+  }
+
+  defined(
+    message?: string
+  ): EqualsSchemaImpl<PossibleValues, Exclude<_Output, undefined>> {
+    this.markAsDefinedInternally(message);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
     return this as any;
