@@ -5,14 +5,14 @@ import { string } from "../string/string-schema";
 import { array } from "./array-schema";
 
 describe("Array Schema", () => {
-  const objSchema: Schema<{ [key: string]: "a" | "b" } | undefined> = objectOf(
-    equals(["a", "b"] as const).required()
-  );
+  const objSchema: Schema<
+    { [key: string]: "a" | "b" } | undefined | null
+  > = objectOf(equals(["a", "b"] as const).required());
 
   const arraySchema = array(objSchema);
 
   const schema: Schema<
-    Array<InferType<typeof objSchema>> | undefined
+    Array<InferType<typeof objSchema>> | undefined | null
   > = arraySchema;
 
   it("Should pass with correct values", () => {
@@ -28,7 +28,7 @@ describe("Array Schema", () => {
   });
 
   it("Should fail when input is not an array", () => {
-    expect(schema.validate(null)).toEqual({
+    expect(schema.validate(4)).toEqual({
       errors: true,
       messagesTree: ["Input must be an array"],
     });
@@ -52,7 +52,7 @@ describe("Array Schema", () => {
     });
   });
 
-  it("Should fail if array lenght is below minimum", () => {
+  it("Should fail if array length is below minimum", () => {
     expect(arraySchema.min(1).validate([])).toEqual({
       errors: true,
       messagesTree: ["Must have more than 1 item"],
@@ -85,7 +85,7 @@ describe("Array Schema", () => {
     });
   });
 
-  it("Should wrap null in an array", () => {
+  it("Should convert null and undefined to empty array", () => {
     const schema: Schema<null[]> = array(
       equals([null]).required()
     ).wrapIfNotAnArray();
@@ -94,7 +94,7 @@ describe("Array Schema", () => {
 
     expect(result).toEqual({
       errors: false,
-      value: [null],
+      value: [],
     });
   });
 });

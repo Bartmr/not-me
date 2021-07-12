@@ -9,7 +9,7 @@ type BaseType = unknown[];
 class ArraySchemaImpl<
   ElementsSchema extends ElementsSchemaBase,
   _Shape extends InferType<ElementsSchema>[] = InferType<ElementsSchema>[],
-  _Output = _Shape | undefined
+  _Output = _Shape | undefined | null
 > extends BaseSchema<BaseType, _Shape, _Output> {
   private minLength = 0;
   private minLengthMessage?: string;
@@ -116,12 +116,31 @@ class ArraySchemaImpl<
     return this as any;
   }
 
+  notNull(
+    message?: string
+  ): ArraySchemaImpl<ElementsSchema, _Shape, Exclude<_Output, null>> {
+    this.markAsNotNullInternally(message);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
+  }
+
+  defined(
+    message?: string
+  ): ArraySchemaImpl<ElementsSchema, _Shape, Exclude<_Output, undefined>> {
+    this.markAsDefinedInternally(message);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
+  }
+
   wrapIfNotAnArray(): ArraySchemaImpl<Schema<unknown>, _Shape, _Shape> {
     this.wrapValueBeforeValidation = (input): undefined | null | unknown[] => {
       if (input instanceof Array) {
         return input as unknown[];
       } else {
-        if (input === undefined) {
+        // Convert null and undefined by using loose equality '=='
+        if (input == undefined) {
           return [];
         } else {
           return [input];

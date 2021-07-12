@@ -13,6 +13,8 @@ enum FilterType {
   Test = "test",
   Transform = "transform",
   UndefinedCatching = "undefined-catching",
+  NullCatchingFilter = "null-catching",
+  NullableCatchingFilter = "nullable-catching",
 }
 
 type BaseTypeFilter<BaseType> = {
@@ -43,10 +45,20 @@ type UndefinedCatchingFilter = {
   message: string;
 };
 
+type NullCatchingFilter = {
+  type: FilterType.NullCatchingFilter;
+  message: string;
+};
+
+type NullableCatchingFilter = {
+  type: FilterType.NullableCatchingFilter;
+  message: string;
+};
+
 export abstract class BaseSchema<
   BaseType,
   Shape extends BaseType = BaseType,
-  _Output = Shape | undefined
+  _Output = Shape | undefined | null
 > implements Schema<_Output> {
   _outputType!: _Output;
 
@@ -58,6 +70,8 @@ export abstract class BaseSchema<
     | TestFilter<InferType<this>>
     | TransformFilter<InferType<this>, unknown>
     | UndefinedCatchingFilter
+    | NullCatchingFilter
+    | NullableCatchingFilter
   > = [];
 
   protected mapMode?: boolean;
@@ -92,7 +106,8 @@ export abstract class BaseSchema<
       _currentValue = this.wrapValueBeforeValidation(_currentValue);
     }
 
-    if (_currentValue !== undefined) {
+    // Ignore null and undefined by using loose equality '!='
+    if (_currentValue != undefined) {
       /*
         BASE TYPE FILTER
       */
@@ -179,9 +194,29 @@ export abstract class BaseSchema<
         }
       } else if (filter.type === FilterType.Transform) {
         _currentValue = filter.filterFn(_currentValue as InferType<this>);
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      } else if (filter.type === FilterType.NullableCatchingFilter) {
+        // Catch null and undefined by using loose equality '=='
+        if (_currentValue == undefined) {
+          return {
+            errors: true,
+            messagesTree: [filter.message],
+          };
+        }
+
+        continue;
       } else if (filter.type === FilterType.UndefinedCatching) {
         if (_currentValue === undefined) {
+          return {
+            errors: true,
+            messagesTree: [filter.message],
+          };
+        }
+
+        continue;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      else if (filter.type === FilterType.NullCatchingFilter) {
+        if (_currentValue === null) {
           return {
             errors: true,
             messagesTree: [filter.message],
@@ -207,14 +242,32 @@ export abstract class BaseSchema<
     } as AcceptedValueValidationResult<InferType<this>>;
   }
 
-  protected markAsRequiredInternally(message: undefined | string): void {
+  protected markAsDefinedInternally(message: undefined | string): void {
     this.otherFilters.push({
       type: FilterType.UndefinedCatching,
+      message: message ?? "Input must be defined",
+    });
+  }
+
+  protected markAsNotNullInternally(message: undefined | string): void {
+    this.otherFilters.push({
+      type: FilterType.NullCatchingFilter,
+      message: message ?? "Input cannot be null",
+    });
+  }
+
+  protected markAsRequiredInternally(message: undefined | string): void {
+    this.otherFilters.push({
+      type: FilterType.NullableCatchingFilter,
       message: message ?? "Input is required",
     });
   }
 
   public abstract required(message?: string): Schema<Shape>;
+  public abstract defined(
+    message?: string
+  ): Schema<Exclude<_Output, undefined>>;
+  public abstract notNull(message?: string): Schema<Exclude<_Output, null>>;
 
   test(testFunction: (value: _Output) => null | string): this {
     this.otherFilters.push({

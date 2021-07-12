@@ -7,7 +7,7 @@ type ValuesSchemasBase = [Schema<unknown>, ...Array<Schema<unknown>>];
 class OrSchemaImpl<
   ValuesSchemas extends ValuesSchemasBase,
   _Shape = InferType<ValuesSchemas[number]>,
-  _Output = _Shape | undefined
+  _Output = _Shape | undefined | null
 > extends BaseSchema<_Shape, _Shape, _Output> {
   constructor(valuesSchemas: ValuesSchemas) {
     if (valuesSchemas.length === 0) {
@@ -51,10 +51,36 @@ class OrSchemaImpl<
     message?: string
   ): OrSchemaImpl<
     ValuesSchemas,
-    Exclude<_Shape, undefined>,
-    Exclude<_Shape, undefined>
+    Exclude<_Shape, undefined | null>,
+    Exclude<_Shape, undefined | null>
   > {
     this.markAsRequiredInternally(message);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
+  }
+
+  notNull(
+    message?: string
+  ): OrSchemaImpl<
+    ValuesSchemas,
+    Exclude<_Shape, null>,
+    Exclude<_Output, null>
+  > {
+    this.markAsNotNullInternally(message);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
+  }
+
+  defined(
+    message?: string
+  ): OrSchemaImpl<
+    ValuesSchemas,
+    Exclude<_Shape, undefined>,
+    Exclude<_Output, undefined>
+  > {
+    this.markAsDefinedInternally(message);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
     return this as any;

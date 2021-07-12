@@ -55,4 +55,22 @@ describe("Base Schema", () => {
 
     expect(lastTransform).not.toHaveBeenCalled();
   });
+
+  it("require() should catch both null and undefined", () => {
+    const schema = number().integer().required();
+
+    const undefinedRes = schema.validate(undefined, { abortEarly: false });
+
+    expect(undefinedRes).toEqual({
+      errors: true,
+      messagesTree: ["Input is required"],
+    });
+
+    const nullRes = schema.validate(null, { abortEarly: false });
+
+    expect(nullRes).toEqual({
+      errors: true,
+      messagesTree: ["Input is required"],
+    });
+  });
 });

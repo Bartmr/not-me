@@ -19,7 +19,7 @@ type SchemaObjToShape<
 class ObjectSchemaImpl<
   SchemaObj extends { [key: string]: Schema<unknown> },
   _Shape = SchemaObjToShape<SchemaObj>,
-  _Output = _Shape | undefined
+  _Output = _Shape | undefined | null
 > extends BaseSchema<BaseType, _Shape, _Output> {
   constructor(schemaObj: SchemaObj, message?: string) {
     super((input) => {
@@ -116,6 +116,24 @@ class ObjectSchemaImpl<
 
   required(message?: string): ObjectSchemaImpl<SchemaObj, _Shape, _Shape> {
     this.markAsRequiredInternally(message);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
+  }
+
+  notNull(
+    message?: string
+  ): ObjectSchemaImpl<SchemaObj, _Shape, Exclude<_Output, null>> {
+    this.markAsNotNullInternally(message);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+    return this as any;
+  }
+
+  defined(
+    message?: string
+  ): ObjectSchemaImpl<SchemaObj, _Shape, Exclude<_Output, undefined>> {
+    this.markAsDefinedInternally(message);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
     return this as any;

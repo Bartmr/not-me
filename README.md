@@ -62,14 +62,15 @@ This library offers the following basic types for you to build more complex vali
 - `object({ property: schemaForTheProperty })`
 - `objectOf(schemaForAllProperties)` - same as `object()` but for objects whose keys can be any string
 - `string()`
-- `null()`
 - `or([...schemas])` - the value is filtered by multiple schemas till one matches. It's the equivalent to an _union type_
 
 With these basic blocks, you can build more complex validations, by chaining...
 
 - `test((v) => <condition> ? null : "Error message")` - will validate if your value matches a condition. If it does, return `null`. If it doesn't match the condition, return a `string` with the error message you want to return.
 - `transform((v) => <transform input value into any other value>)` - will allow you to modify the input value
-- `required()` - sets the schema to reject `undefined` values
+- `required()` - sets the schema to reject `undefined` and `null` values
+- `defined()` - sets the schema to reject `undefined` values
+- `notNull()` - sets the schema to reject `null` values
 
 The methods above are all inherited from the `base()` schema. Other schemas might provide their own helpful methods, like `string()` provides `string().filled()`, a method that makes sure the field is filled not just with blank spaces.
 
