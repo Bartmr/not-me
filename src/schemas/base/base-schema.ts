@@ -95,11 +95,7 @@ export abstract class BaseSchema<
     input: unknown,
     options?: ValidationOptions
   ): ValidationResult<_Output> {
-    const _options: ValidationOptions = {
-      // Use typeof to avoid 'process is not defined' error
-      abortEarly: typeof process === "undefined" ? false : true,
-      ...options,
-    };
+    const _options: ValidationOptions = options;
 
     let _currentValue = input;
 
@@ -183,7 +179,7 @@ export abstract class BaseSchema<
         if (result === null) {
           continue;
         } else {
-          if (_options.abortEarly) {
+          if (_options?.abortEarly) {
             return {
               errors: true,
               messagesTree: [result],
