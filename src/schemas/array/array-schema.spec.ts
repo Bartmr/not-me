@@ -35,9 +35,11 @@ describe("Array Schema", () => {
   it("Should fail with wrong values", () => {
     expect(schema.validate([undefined, undefined, { someProp: "c" }])).toEqual({
       errors: true,
-      messagesTree: {
-        2: { someProp: ["Input must be one of the allowed values"] },
-      },
+      messagesTree: [
+        {
+          2: [{ someProp: ["Input must be one of the allowed values"] }],
+        },
+      ],
     });
   });
 

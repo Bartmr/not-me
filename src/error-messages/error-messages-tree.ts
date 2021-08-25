@@ -4,9 +4,9 @@ import {
 } from "../utils/get-typesafe-object-field-path";
 import lodashGet from "lodash/get";
 
-export type AnyErrorMessagesTree =
-  | Array<string | AnyErrorMessagesTree>
-  | { [key: string]: AnyErrorMessagesTree };
+export type AnyErrorMessagesTree = Array<
+  string | { [key: string]: AnyErrorMessagesTree }
+>;
 
 export function getErrorMessagesFromField<Output>(
   messagesTree: AnyErrorMessagesTree,

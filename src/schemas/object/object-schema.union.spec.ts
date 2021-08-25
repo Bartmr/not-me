@@ -59,9 +59,11 @@ describe("Object Schema - Union", () => {
 
       expect(result).toEqual({
         errors: true,
-        messagesTree: {
-          d: ["Input must be one of the allowed values"],
-        },
+        messagesTree: [
+          {
+            d: ["Input must be one of the allowed values"],
+          },
+        ],
       });
     });
   });

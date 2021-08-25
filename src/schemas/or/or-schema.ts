@@ -17,13 +17,15 @@ class OrSchemaImpl<
     super((input, options) => {
       let acceptedResultValue: unknown;
       let isValid = false;
-      const errorsFromSchemaIteration: AnyErrorMessagesTree[] = [];
+      let errorsFromSchemaIteration: AnyErrorMessagesTree = [];
 
       for (const schema of valuesSchemas) {
         const result = schema.validate(input, options);
 
         if (result.errors) {
-          errorsFromSchemaIteration.push(result.messagesTree);
+          errorsFromSchemaIteration = errorsFromSchemaIteration.concat(
+            result.messagesTree
+          );
           continue;
         } else {
           acceptedResultValue = result.value;

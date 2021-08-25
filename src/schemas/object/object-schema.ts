@@ -60,9 +60,11 @@ class ObjectSchemaImpl<
         if (options?.abortEarly) {
           return {
             errors: true,
-            messagesTree: {
-              [fieldKey]: fieldResult.messagesTree,
-            },
+            messagesTree: [
+              {
+                [fieldKey]: fieldResult.messagesTree,
+              },
+            ],
           };
         } else {
           errorsFieldsErrorMessages[fieldKey] = fieldResult.messagesTree;
@@ -75,7 +77,7 @@ class ObjectSchemaImpl<
     if (Object.keys(errorsFieldsErrorMessages).length > 0) {
       return {
         errors: true,
-        messagesTree: errorsFieldsErrorMessages,
+        messagesTree: [errorsFieldsErrorMessages],
       };
     } else {
       return {

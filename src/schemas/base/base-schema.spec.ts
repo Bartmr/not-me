@@ -12,9 +12,11 @@ describe("Base Schema", () => {
 
     expect(schema.validate({ a: 1000.1 }, { abortEarly: false })).toEqual({
       errors: true,
-      messagesTree: {
-        a: ["Input must be an integer", "Must be smaller than 1000"],
-      },
+      messagesTree: [
+        {
+          a: ["Input must be an integer", "Must be smaller than 1000"],
+        },
+      ],
     });
   });
 
@@ -28,9 +30,11 @@ describe("Base Schema", () => {
 
     expect(schema.validate({ a: 1000.1 }, { abortEarly: true })).toEqual({
       errors: true,
-      messagesTree: {
-        a: ["Input must be an integer"],
-      },
+      messagesTree: [
+        {
+          a: ["Input must be an integer"],
+        },
+      ],
     });
   });
 

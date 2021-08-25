@@ -83,9 +83,11 @@ class ArraySchemaImpl<
           if (options?.abortEarly) {
             return {
               errors: true,
-              messagesTree: {
-                [index]: result.messagesTree,
-              },
+              messagesTree: [
+                {
+                  [index]: result.messagesTree,
+                },
+              ],
             };
           } else {
             errors[index] = result.messagesTree;
@@ -98,7 +100,7 @@ class ArraySchemaImpl<
       if (Object.keys(errors).length > 0) {
         return {
           errors: true,
-          messagesTree: errors,
+          messagesTree: [errors],
         };
       } else {
         return {

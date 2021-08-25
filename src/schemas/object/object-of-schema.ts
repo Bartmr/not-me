@@ -27,9 +27,11 @@ abstract class ObjectOfSchemaImpl<
           if (options?.abortEarly) {
             return {
               errors: true,
-              messagesTree: {
-                [fieldKey]: result.messagesTree,
-              },
+              messagesTree: [
+                {
+                  [fieldKey]: result.messagesTree,
+                },
+              ],
             };
           } else {
             errors[fieldKey] = result.messagesTree;
@@ -42,7 +44,7 @@ abstract class ObjectOfSchemaImpl<
       if (Object.keys(errors).length > 0) {
         return {
           errors: true,
-          messagesTree: errors,
+          messagesTree: [errors],
         };
       } else {
         return {
