@@ -7,22 +7,18 @@ function getDeeperTypesafeObjectFieldPath<T>(previousRecursionPath: string) {
   return <K extends keyof T>(
     keyOrIndex: K
   ): TypesafeObjectFieldPathPointer<T[K]> => {
-    let newPath: string;
-
-    if (typeof keyOrIndex === "number") {
-      newPath = `${previousRecursionPath}[${keyOrIndex}]`;
-    } else if (typeof keyOrIndex === "string") {
-      newPath = `${previousRecursionPath}${
+    if (typeof keyOrIndex === "number" || typeof keyOrIndex === "string") {
+      const newPath = `${previousRecursionPath}${
         previousRecursionPath === "" ? "" : "."
       }${keyOrIndex}`;
+
+      return {
+        and: getDeeperTypesafeObjectFieldPath<T[K]>(newPath),
+        end: () => newPath,
+      };
     } else {
       throw new Error();
     }
-
-    return {
-      and: getDeeperTypesafeObjectFieldPath<T[K]>(newPath),
-      end: () => newPath,
-    };
   };
 }
 
