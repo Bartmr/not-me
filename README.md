@@ -121,7 +121,7 @@ const schema = object({
 
 ### Validation options
 
-- `abortEarly`: stop validation when the first invalid field is found. Default is `true` when running in _NodeJS_, to avoid performance issues.
+- `abortEarly`: stop validation when the first invalid field is found.
 
 ### Creating a schema of my own:
 
