@@ -48,7 +48,7 @@ class ArraySchemaImpl<
       const moreThanMaximumDefaultMessage =
         DefaultErrorMessagesManager.getDefaultMessages().array?.moreThanMaximum;
 
-      if (input.length <= this.minLength) {
+      if (input.length < this.minLength) {
         return {
           errors: true,
           messagesTree: [
@@ -60,14 +60,14 @@ class ArraySchemaImpl<
               }`,
           ],
         };
-      } else if (input.length >= this.maxLength) {
+      } else if (input.length > this.maxLength) {
         return {
           errors: true,
           messagesTree: [
             this.maxLengthMessage ||
               (moreThanMaximumDefaultMessage &&
                 moreThanMaximumDefaultMessage(this.maxLength)) ||
-              `Must not have more than ${this.maxLength} item${
+              `Cannot have more than ${this.maxLength} item${
                 this.maxLength === 1 ? "" : "s"
               }`,
           ],

@@ -44,18 +44,16 @@ describe("Array Schema", () => {
   });
 
   it("Should fail if array length is over maximum", () => {
-    expect(
-      arraySchema.max(1).validate([undefined, undefined, undefined])
-    ).toEqual({
+    expect(arraySchema.max(1).validate([undefined, undefined])).toEqual({
       errors: true,
-      messagesTree: ["Must have less than 1 item"],
+      messagesTree: ["Cannot have more than 1 item"],
     });
   });
 
   it("Should fail if array length is below minimum", () => {
     expect(arraySchema.min(1).validate([])).toEqual({
       errors: true,
-      messagesTree: ["Must have more than 1 item"],
+      messagesTree: ["Must have at least 1 item"],
     });
   });
 
