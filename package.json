@@ -1,6 +1,6 @@
 {
   "name": "not-me",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "Easy and type-safe validation",
   "main": "lib/index.js",
   "types": "lib/types.d.ts",
@@ -35,12 +35,9 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "lodash": "^4.17.21"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^26.0.24",
-    "@types/lodash": "^4.14.171",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
     "eslint": "^7.30.0",
