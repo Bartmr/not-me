@@ -99,7 +99,11 @@ class ObjectSchemaImpl<
     Result = SchemaObjToShape<ResultSchemaObj>
   >(
     schemaFactory: SchemaFactory
-  ): ObjectSchemaImpl<ResultSchemaObj, Result, Exclude<_Output, _Shape>> {
+  ): ObjectSchemaImpl<
+    ResultSchemaObj,
+    Result,
+    Result | Exclude<_Output, _Shape>
+  > {
     this.addShapeFilter((input, options) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const schema = schemaFactory(input as any);
