@@ -1,5 +1,8 @@
+import { boolean } from "../boolean/boolean-schema";
 import { equals } from "../equals/equals-schema";
+import { number } from "../number/number-schema";
 import { ValidationResult, InferType, Schema } from "../schema";
+import { string } from "../string/string-schema";
 import { object } from "./object-schema";
 
 describe("Object Schema - Union", () => {
@@ -65,6 +68,38 @@ describe("Object Schema - Union", () => {
           },
         ],
       });
+    });
+
+    it("Unions should not disrupt nullabilty type of result", () => {
+      const schema: Schema<
+        | {
+            a: true;
+            b: number;
+          }
+        | {
+            a?: false | null;
+            c: string;
+          }
+      > = object({
+        a: boolean(),
+      })
+        .required()
+        .union((v) => {
+          if (v.a) {
+            return {
+              a: equals([true]).required(),
+              b: number().required(),
+            };
+          } else {
+            return {
+              a: equals([false]),
+              c: string().required(),
+            };
+          }
+        });
+
+      // NO-OP test
+      expect(!!schema).toBe(true);
     });
   });
 });

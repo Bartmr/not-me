@@ -8,16 +8,16 @@ import {
 } from "../schema";
 import { BaseType, objectTypeFilter } from "./object-type-filter";
 
-type SchemaObjToShape<
-  SchemasObj extends { [key: string]: Schema<unknown> | undefined }
-> = {
+type SchemaObjectBase = { [key: string]: Schema<unknown> | undefined };
+
+type SchemaObjToShape<SchemasObj extends SchemaObjectBase> = {
   [K in keyof SchemasObj]: SchemasObj[K] extends Schema<unknown>
     ? InferType<SchemasObj[K]>
     : never;
 };
 
 class ObjectSchemaImpl<
-  SchemaObj extends { [key: string]: Schema<unknown> },
+  SchemaObj extends SchemaObjectBase,
   _Shape = SchemaObjToShape<SchemaObj>,
   _Output = _Shape | undefined | null
 > extends BaseSchema<BaseType, _Shape, _Output> {
@@ -88,14 +88,18 @@ class ObjectSchemaImpl<
   }
 
   union<
-    SchemaFactory extends (value: SchemaObjToShape<SchemaObj>) => {
-      [key: string]: Schema<unknown> | undefined;
-    }
+    SchemaFactory extends (
+      value: SchemaObjToShape<SchemaObj>
+    ) => SchemaObjectBase,
+    ResultSchemaObj extends SchemaObjectBase = Omit<
+      SchemaObj,
+      keyof ReturnType<SchemaFactory>
+    > &
+      ReturnType<SchemaFactory>,
+    Result = SchemaObjToShape<ResultSchemaObj>
   >(
     schemaFactory: SchemaFactory
-  ): ObjectSchemaImpl<
-    Omit<SchemaObj, keyof ReturnType<SchemaFactory>> & ReturnType<SchemaFactory>
-  > {
+  ): ObjectSchemaImpl<ResultSchemaObj, Result, Exclude<_Output, _Shape>> {
     this.addShapeFilter((input, options) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const schema = schemaFactory(input as any);
