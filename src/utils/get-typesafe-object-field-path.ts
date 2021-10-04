@@ -25,7 +25,7 @@ function getDeeperTypesafeObjectFieldPath<T>(previousRecursionPath: string) {
 /*
     README:
     getTypesafeObjectFieldPath(values).and("houses").and(index).and("loanInterestPurchase").end()
-    will return a lodash-like object path "houses[0].loanInterestPurchase"
+    will return a lodash-like object path "houses.0.loanInterestPurchase"
     suitable for field names in most form libraries and also ensuring type safety
     if any of the key names in the object tree changes.
 
