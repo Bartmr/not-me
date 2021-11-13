@@ -4,7 +4,7 @@ module.exports = {
     project: "tsconfig.json",
     sourceType: "module",
   },
-  plugins: ["@typescript-eslint/eslint-plugin"],
+  plugins: ["@typescript-eslint/eslint-plugin", "node"],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -33,6 +33,7 @@ module.exports = {
     "@typescript-eslint/no-unsafe-call": "error",
     "@typescript-eslint/no-unsafe-member-access": "error",
     "@typescript-eslint/no-unsafe-return": "error",
+    "@typescript-eslint/no-unsafe-argument": "error",
     "@typescript-eslint/restrict-template-expressions": [
       "error",
       { allowNumber: true, allowNullish: false },
@@ -41,15 +42,10 @@ module.exports = {
       "error",
       { ignoreVoid: false, ignoreIIFE: false },
     ],
-    "@typescript-eslint/no-implicit-any-catch": [
-      "error",
-      {
-        allowExplicitAny: false,
-      },
-    ],
     "@typescript-eslint/no-unnecessary-condition": "error",
     "@typescript-eslint/unbound-method": "error",
     "no-console": "error",
     "no-debugger": "error",
+    "node/no-process-env": "error",
   },
 };

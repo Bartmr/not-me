@@ -105,7 +105,7 @@ class ObjectSchemaImpl<
     Result | Exclude<_Output, _Shape>
   > {
     this.addShapeFilter((input, options) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
       const schema = schemaFactory(input as any);
 
       const result = this.validateObj(schema, input, options);
