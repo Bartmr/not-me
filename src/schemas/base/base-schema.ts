@@ -128,7 +128,24 @@ export abstract class BaseSchema<
 
       if (this.mapMode) {
         shapedValue = {} as BaseType;
-        let shapedValueWithUnknownProperties = _currentValue as BaseType;
+
+        /* 
+          Used with ObjectSchema.union(),
+          in order make the object more precise as it goes through many filters,
+          including transform() calls on each of its properties
+        */
+        let shapedValueWithUnknownProperties = {
+          /*
+            Avoid changing the original object instance (which might even break the expected types from it, when running transformations),
+            by cloning it
+
+            Also fixes errors like 'TypeError: Cannot set property x of #<y> which has only a getter'
+
+            We can assume it's an object since only the ObjectSchema sets this.mapMode.
+            We also know it's an object because we already went through the type filter
+          */
+          ...(_currentValue as { [key: string]: unknown }),
+        } as unknown as BaseType;
 
         for (let i = 0; i < this.shapeFilters.length; i++) {
           const shapeFilter = this.shapeFilters[i] || throwError();
