@@ -1,6 +1,6 @@
 {
   "name": "not-me",
-  "version": "4.3.4",
+  "version": "4.3.5",
   "description": "Easy and type-safe validation",
   "main": "lib/index.js",
   "types": "lib/types.d.ts",

@@ -19,4 +19,13 @@ describe("Number Schema", () => {
       value: 123.3,
     });
   });
+
+  it("Let undefined pass an integer check, if number is not required", () => {
+    const schema: Schema<number | undefined | null> = number().integer();
+
+    expect(schema.validate(undefined)).toEqual({
+      errors: false,
+      value: undefined,
+    });
+  });
 });
