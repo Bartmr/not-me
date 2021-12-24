@@ -28,4 +28,22 @@ describe("Number Schema", () => {
       value: undefined,
     });
   });
+
+  it("Empty strings should be transformed to undefined", () => {
+    const schema: Schema<number | undefined | null> = number();
+
+    expect(schema.validate("")).toEqual({
+      errors: false,
+      value: undefined,
+    });
+  });
+
+  it("Strings with whitespaces should be transformed to undefined", () => {
+    const schema: Schema<number | undefined | null> = number();
+
+    expect(schema.validate("   ")).toEqual({
+      errors: false,
+      value: undefined,
+    });
+  });
 });
