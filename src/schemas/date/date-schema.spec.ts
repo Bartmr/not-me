@@ -24,4 +24,22 @@ describe("Date Schema", () => {
       expect(result.value.getTime()).toBe(dateInput.getTime());
     }
   });
+
+  it("Empty strings should be transformed to undefined", () => {
+    const schema: Schema<Date | undefined | null> = date();
+
+    expect(schema.validate("")).toEqual({
+      errors: false,
+      value: undefined,
+    });
+  });
+
+  it("Strings with only whitespaces should be transformed to undefined", () => {
+    const schema: Schema<Date | undefined | null> = date();
+
+    expect(schema.validate("   ")).toEqual({
+      errors: false,
+      value: undefined,
+    });
+  });
 });

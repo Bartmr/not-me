@@ -53,6 +53,20 @@ class DateSchemaImpl<_Output = Date | undefined | null> extends BaseSchema<
         };
       }
     });
+
+    this.wrapValueBeforeValidation = (input) => {
+      if (typeof input === "string") {
+        const trimmed = input.trim();
+
+        if (!trimmed) {
+          return undefined;
+        } else {
+          return trimmed;
+        }
+      } else {
+        return input;
+      }
+    };
   }
 
   required(message?: string): DateSchemaImpl<Date> {

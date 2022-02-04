@@ -38,7 +38,7 @@ describe("Number Schema", () => {
     });
   });
 
-  it("Strings with whitespaces should be transformed to undefined", () => {
+  it("Strings with only whitespaces should be transformed to undefined", () => {
     const schema: Schema<number | undefined | null> = number();
 
     expect(schema.validate("   ")).toEqual({
