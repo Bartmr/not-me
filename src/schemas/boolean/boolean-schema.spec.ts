@@ -1,7 +1,7 @@
 import { Schema } from "../schema";
 import { boolean } from "./boolean-schema";
 
-describe("Date Schema", () => {
+describe("Boolean Schema", () => {
   it("Empty strings should be transformed to undefined", () => {
     const schema: Schema<boolean | undefined | null> = boolean();
 
