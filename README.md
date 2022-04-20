@@ -158,3 +158,17 @@ When you set up a schema, you're just pilling up filter functions that will test
 - **Type filter** will validate if your input is in a specific type (example: a number, an object, an array, etc...)
 - **Shape filters** will validate the fields in your value. This only applies to object and array values
 - **Test and Transform filters** will run basic _true_ or _false_ checks on your value, or transform your value.
+
+## Library development
+
+### Changing the supported Node version
+
+- Files to be changed
+  - .nvmrc
+  - Dockerfile.dev
+  - package.json
+    - `engine` field
+    - `@types/node` version
+  - tsconfig.json
+- delete all `node_modules` directories and `package-lock.json` files
+- run `npm run install`
