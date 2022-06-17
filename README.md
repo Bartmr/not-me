@@ -123,31 +123,26 @@ const schema = object({
 
 - `abortEarly`: stop validation when the first invalid field is found.
 
-### Creating a schema of my own:
-
-Just extend the class of the closest schema there is for your type of value, and call the `transform()` and `test()` methods in your new schema to setup the validation logic that will be run. Can be either in it's _constructor_, or you can add new methods to your schema.
-
-- Here's how an Integer Schema could be implemented:
+### Creating a custom schema:
 
 ```typescript
-import { NumberSchema } from "not-me/lib/schemas/number/number-schema";
+import { number } from "not-me/lib/schemas/number/number-schema";
 
-class IntegerSchema extends NumberSchema {
-  constructor(message?: string) {
-    super();
+export function positiveInteger() {
+  return number()
+    .integer()
+    .test((n) => {
+      // Skip nullable values
+      if (n == null) {
+        return null;
+      }
 
-    this.test((input) =>
-      Number.isInteger(input) ? null : "Input must be an integer"
-    );
-  }
-}
-
-/*
-  Just a wrapper function so you don't have to write `new IntegerSchema()`.
-  It's more readable if you just call `integer()` inside a complex schema.
-*/
-export function integer(message?: string) {
-  return new IntegerSchema(message);
+      if (n >= 0) {
+        return null;
+      } else {
+        return "Not a positive number";
+      }
+    });
 }
 ```
 
