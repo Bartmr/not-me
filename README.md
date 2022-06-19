@@ -72,8 +72,6 @@ With these basic blocks, you can build more complex validations, by chaining...
 - `defined()` - sets the schema to reject `undefined` values
 - `notNull()` - sets the schema to reject `null` values
 
-The methods above are all inherited from the `base()` schema. Other schemas might provide their own helpful methods, like `string()` provides `string().filled()`, a method that makes sure the field is filled not just with blank spaces.
-
 Typescript will guide you in the recommended order by which you should chain validations.
 
 If you follow what auto-complete presents to you, you will be fine.
@@ -130,7 +128,18 @@ import { number } from "not-me/lib/schemas/number/number-schema";
 
 export function positiveInteger() {
   return number()
-    .integer()
+    .test((n) => {
+      // Skip nullable values
+      if (n == null) {
+        return null;
+      }
+
+      if (Number.isInteger(n)) {
+        return null;
+      } else {
+        return "Not an integer";
+      }
+    })
     .test((n) => {
       // Skip nullable values
       if (n == null) {

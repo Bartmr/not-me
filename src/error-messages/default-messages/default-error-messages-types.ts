@@ -20,7 +20,6 @@ export type DefaultErrorMessages = Partial<{
   }>;
   string: Partial<{
     notAString: string;
-    notFilled: string;
   }>;
   date: Partial<{
     notADate: string;

@@ -27,19 +27,6 @@ abstract class StringSchemaImpl<
     });
   }
 
-  /**
-   * Input must have any character other than spaces
-   */
-  filled(message?: string): StringSchemaImpl<string> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.test((input) => {
-      return input && input.trim().length > 0
-        ? null
-        : message ?? "Input must be filled";
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    }) as any;
-  }
-
   public required(message?: string): StringSchemaImpl<string> {
     this.markAsRequiredInternally(message);
 

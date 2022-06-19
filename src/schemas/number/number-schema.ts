@@ -52,7 +52,7 @@ class NumberSchemaImpl<_Output = number | undefined | null> extends BaseSchema<
   }
 
   integer(message?: string): this {
-    this.test((input) => {
+    return this.test((input) => {
       if (input == null) {
         return null;
       } else {
@@ -64,8 +64,6 @@ class NumberSchemaImpl<_Output = number | undefined | null> extends BaseSchema<
               "Input must be an integer";
       }
     });
-
-    return this;
   }
 
   required(message?: string): NumberSchemaImpl<number> {
