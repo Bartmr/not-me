@@ -8,8 +8,9 @@ export type DefaultErrorMessages = Partial<{
     moreThanMaximum: (maxLength: number) => string;
   }>;
   base: Partial<{
-    isNull: string;
-    isUndefined: string;
+    cannotBeNull: string;
+    cannotBeUndefined: string;
+    isRequired: string;
   }>;
   equals: Partial<{
     notEqual: string;
@@ -26,8 +27,5 @@ export type DefaultErrorMessages = Partial<{
   }>;
   boolean: Partial<{
     notABoolean: string;
-  }>;
-  null: Partial<{
-    notNull: string;
   }>;
 }>;
