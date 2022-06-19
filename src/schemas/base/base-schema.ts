@@ -259,21 +259,21 @@ export abstract class BaseSchema<
   protected markAsDefinedInternally(message: undefined | string): void {
     this.otherFilters.push({
       type: FilterType.UndefinedCatching,
-      message: message ?? "Input must be defined",
+      message: message || "Input must be defined",
     });
   }
 
   protected markAsNotNullInternally(message: undefined | string): void {
     this.otherFilters.push({
       type: FilterType.NullCatchingFilter,
-      message: message ?? "Input cannot be null",
+      message: message || "Input cannot be null",
     });
   }
 
   protected markAsRequiredInternally(message: undefined | string): void {
     this.otherFilters.push({
       type: FilterType.NullableCatchingFilter,
-      message: message ?? "Input is required",
+      message: message || "Input is required",
     });
   }
 
