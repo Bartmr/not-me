@@ -1,11 +1,24 @@
 import { number } from "../number/number-schema";
 import { object } from "../object/object-schema";
 
+function isInteger(n: undefined | null | number) {
+  // Skip nullable values
+  if (n == null) {
+    return null;
+  }
+
+  if (Number.isInteger(n)) {
+    return null;
+  } else {
+    return "Not an integer";
+  }
+}
+
 describe("Base Schema", () => {
   it("Fail with multiple error messages", () => {
     const schema = object({
       a: number()
-        .integer()
+        .test(isInteger)
         .required()
         .test((v) => (v < 1000 ? null : "Must be smaller than 1000")),
     }).required();
@@ -14,7 +27,7 @@ describe("Base Schema", () => {
       errors: true,
       messagesTree: [
         {
-          a: ["Input must be an integer", "Must be smaller than 1000"],
+          a: ["Not an integer", "Must be smaller than 1000"],
         },
       ],
     });
@@ -23,7 +36,8 @@ describe("Base Schema", () => {
   it("Fail at the first failed condition when abortEarly is true", () => {
     const schema = object({
       a: number()
-        .integer()
+        .test(isInteger)
+
         .required()
         .test((v) => (v < 1000 ? null : "Must be smaller than 1000")),
     }).required();
@@ -32,7 +46,7 @@ describe("Base Schema", () => {
       errors: true,
       messagesTree: [
         {
-          a: ["Input must be an integer"],
+          a: ["Not an integer"],
         },
       ],
     });
@@ -40,7 +54,8 @@ describe("Base Schema", () => {
 
   it("Send transformed value to validations that follow, even when abortEarly is true", () => {
     const schema = number()
-      .integer()
+      .test(isInteger)
+
       .transform(() => "transformed-value")
       .test((v) => (v === "transformed-value" ? null : "invalid"));
 
@@ -53,7 +68,11 @@ describe("Base Schema", () => {
   it("Stop validating a value if it didn't pass the required() condition", () => {
     const lastTransform = jest.fn();
 
-    const schema = number().integer().required().test(lastTransform);
+    const schema = number()
+      .test(isInteger)
+
+      .required()
+      .test(lastTransform);
 
     schema.validate(undefined);
 
@@ -61,7 +80,10 @@ describe("Base Schema", () => {
   });
 
   it("require() should catch both null and undefined", () => {
-    const schema = number().integer().required();
+    const schema = number()
+      .test(isInteger)
+
+      .required();
 
     const undefinedRes = schema.validate(undefined);
 

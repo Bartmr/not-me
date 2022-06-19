@@ -51,21 +51,6 @@ class NumberSchemaImpl<_Output = number | undefined | null> extends BaseSchema<
     };
   }
 
-  integer(message?: string): this {
-    return this.test((input) => {
-      if (input == null) {
-        return null;
-      } else {
-        return Number.isInteger(input)
-          ? null
-          : message ||
-              DefaultErrorMessagesManager.getDefaultMessages().number
-                ?.isNotInteger ||
-              "Input must be an integer";
-      }
-    });
-  }
-
   required(message?: string): NumberSchemaImpl<number> {
     this.markAsRequiredInternally(message);
 

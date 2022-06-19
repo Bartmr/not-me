@@ -20,15 +20,6 @@ describe("Number Schema", () => {
     });
   });
 
-  it("Let undefined pass an integer check, if number is not required", () => {
-    const schema: Schema<number | undefined | null> = number().integer();
-
-    expect(schema.validate(undefined)).toEqual({
-      errors: false,
-      value: undefined,
-    });
-  });
-
   it("Empty strings should be transformed to undefined", () => {
     const schema: Schema<number | undefined | null> = number();
 

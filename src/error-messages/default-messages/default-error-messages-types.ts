@@ -16,7 +16,6 @@ export type DefaultErrorMessages = Partial<{
   }>;
   number: Partial<{
     notANumber: string;
-    isNotInteger: string;
   }>;
   string: Partial<{
     notAString: string;
