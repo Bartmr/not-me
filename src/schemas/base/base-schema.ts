@@ -1,5 +1,4 @@
 import { DefaultErrorMessagesManager } from "../../error-messages/default-messages/default-error-messages-manager";
-import { throwError } from "../../utils/throw-error";
 import {
   ValidationResult,
   Schema,
@@ -148,9 +147,7 @@ export abstract class BaseSchema<
           ...(_currentValue as { [key: string]: unknown }),
         } as unknown as BaseType;
 
-        for (let i = 0; i < this.shapeFilters.length; i++) {
-          const shapeFilter = this.shapeFilters[i] || throwError();
-
+        for (const shapeFilter of this.shapeFilters) {
           const filterRes = shapeFilter.filterFn(
             shapedValueWithUnknownProperties,
             _options
@@ -169,9 +166,7 @@ export abstract class BaseSchema<
       } else {
         shapedValue = _currentValue as BaseType;
 
-        for (let i = 0; i < this.shapeFilters.length; i++) {
-          const shapeFilter = this.shapeFilters[i] || throwError();
-
+        for (const shapeFilter of this.shapeFilters) {
           const filterRes = shapeFilter.filterFn(shapedValue, _options);
 
           if (filterRes.errors) {
