@@ -160,4 +160,43 @@ describe("Object Schema - Union", () => {
 
     expect(unionCallback).not.toHaveBeenCalled();
   });
+
+  it("should strip unknown fields", () => {
+    const obj = {
+      unknownField: "value",
+      type: "a",
+      nestedObj: { unknownField: "value", type: "a", hello: "world" },
+    };
+
+    const schema = object({ type: equals(["a", "b"] as const).required() })
+      .required()
+      .union((value) => {
+        if (value.type === "a") {
+          return {
+            type: equals(["a"] as const).required(),
+            nestedObj: object({ type: equals(["a", "b"] as const).required() })
+              .required()
+              .union((value) => {
+                if (value.type === "a") {
+                  return {
+                    type: equals(["a"] as const).required(),
+                    hello: equals(["world"]).required(),
+                  };
+                } else {
+                  throw new Error();
+                }
+              }),
+          };
+        } else {
+          throw new Error();
+        }
+      });
+
+    const result = schema.validate(obj);
+
+    expect(result).toEqual({
+      errors: false,
+      value: { type: "a", nestedObj: { type: "a", hello: "world" } },
+    });
+  });
 });
