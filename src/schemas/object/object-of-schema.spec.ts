@@ -45,7 +45,9 @@ describe("Object Of Schema", () => {
   it("should return cloned objects when validating them", () => {
     const obj = { nestedObj: { hello: "world" } };
 
-    const schema = objectOf(objectOf(string().required())).required();
+    const schema = objectOf(
+      objectOf(string().required()).required()
+    ).required();
 
     const validationResult = schema.validate(obj);
 
