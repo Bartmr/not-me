@@ -83,4 +83,21 @@ describe("Object Schema", () => {
       value: { a: "a" },
     });
   });
+
+  it("should return cloned objects when validating them", () => {
+    const obj = { nestedObj: { hello: "world" } };
+
+    const schema = object({
+      nestedObj: object({ hello: string().required() }).required(),
+    }).required();
+
+    const validationResult = schema.validate(obj);
+
+    if (validationResult.errors) {
+      throw new Error();
+    }
+
+    expect(validationResult.value).not.toBe(obj);
+    expect(validationResult.value.nestedObj).not.toBe(obj.nestedObj);
+  });
 });

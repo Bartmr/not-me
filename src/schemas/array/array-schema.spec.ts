@@ -1,4 +1,5 @@
 import { equals } from "../equals/equals-schema";
+import { number } from "../number/number-schema";
 import { objectOf } from "../object/object-of-schema";
 import { InferType, Schema } from "../schema";
 import { string } from "../string/string-schema";
@@ -94,5 +95,19 @@ describe("Array Schema", () => {
       errors: false,
       value: [],
     });
+  });
+
+  it("should return cloned array when validating it", () => {
+    const ar = [1, 2, 3];
+
+    const schema = array(number().required()).required();
+
+    const validationResult = schema.validate(ar);
+
+    if (validationResult.errors) {
+      throw new Error();
+    }
+
+    expect(validationResult.value).not.toBe(ar);
   });
 });

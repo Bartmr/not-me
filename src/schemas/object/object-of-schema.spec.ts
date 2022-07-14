@@ -1,5 +1,6 @@
 import { equals } from "../equals/equals-schema";
 import { ValidationResult } from "../schema";
+import { string } from "../string/string-schema";
 import { objectOf } from "./object-of-schema";
 
 describe("Object Of Schema", () => {
@@ -39,5 +40,20 @@ describe("Object Of Schema", () => {
       errors: true,
       messagesTree: ["Input must be an object"],
     });
+  });
+
+  it("should return cloned objects when validating them", () => {
+    const obj = { nestedObj: { hello: "world" } };
+
+    const schema = objectOf(objectOf(string().required())).required();
+
+    const validationResult = schema.validate(obj);
+
+    if (validationResult.errors) {
+      throw new Error();
+    }
+
+    expect(validationResult.value).not.toBe(obj);
+    expect(validationResult.value.nestedObj).not.toBe(obj.nestedObj);
   });
 });

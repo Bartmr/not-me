@@ -18,6 +18,14 @@ abstract class ObjectOfSchemaImpl<
       const finalValue: { [key: string]: unknown } = {};
       const errors: { [key: string]: AnyErrorMessagesTree } = {};
 
+      /*
+        Concerns:
+          - prototype pollution
+          - server-side performance
+            - memory spent to iterate an object with lots of keys
+
+        Using for...in for those matters.
+      */
       for (const fieldKey in _input) {
         const fieldValue = _input[fieldKey];
 

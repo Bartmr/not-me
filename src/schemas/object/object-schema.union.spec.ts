@@ -102,4 +102,62 @@ describe("Object Schema - Union", () => {
       expect(!!schema).toBe(true);
     });
   });
+
+  it("should return cloned objects when validating them", () => {
+    const obj = { type: "a", nestedObj: { type: "a", hello: "world" } };
+
+    const schema = object({ type: equals(["a", "b"] as const).required() })
+      .required()
+      .union((value) => {
+        if (value.type === "a") {
+          return {
+            type: equals(["a"] as const).required(),
+            nestedObj: object({ type: equals(["a", "b"] as const).required() })
+              .required()
+              .union((value) => {
+                if (value.type === "a") {
+                  return {
+                    type: equals(["a"] as const).required(),
+                    hello: equals(["world"]).required(),
+                  };
+                } else {
+                  throw new Error();
+                }
+              }),
+          };
+        } else {
+          throw new Error();
+        }
+      });
+
+    const validationResult = schema.validate(obj);
+
+    if (validationResult.errors) {
+      throw new Error();
+    }
+
+    expect(validationResult.value).not.toBe(obj);
+    expect(validationResult.value.nestedObj).not.toBe(obj.nestedObj);
+  });
+
+  it("should not run union callback when value is undefined or null", () => {
+    const unionCallback = jest.fn();
+
+    const schema = object({
+      type: equals(["a", "b"] as const).required(),
+    }).union(unionCallback);
+
+    const undefinedValidationResult = schema.validate(undefined);
+    const nullValidationResult = schema.validate(null);
+
+    if (undefinedValidationResult.errors) {
+      throw new Error();
+    }
+
+    if (nullValidationResult.errors) {
+      throw new Error();
+    }
+
+    expect(unionCallback).not.toHaveBeenCalled();
+  });
 });
