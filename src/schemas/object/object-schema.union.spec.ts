@@ -40,22 +40,56 @@ describe("Object Schema - Union", () => {
       } else {
         const value: Expected = result.value;
 
-        expect(value).toEqual(input);
+        expect(value).toEqual({ common: "common", a: "a", c: 0 });
       }
+    });
 
-      const input2: Expected = { common: "common", a: "b", d: false };
-      const result2 = schema.validate(input2);
+    it("valid 2", () => {
+      type Expected = InferType<typeof schema>;
 
-      if (result2.errors) {
+      const input: Expected = { common: "common", a: "b", d: false };
+      const result = schema.validate(input);
+
+      if (result.errors) {
         throw new Error();
       } else {
-        const value: Expected = result2.value;
+        const value: Expected = result.value;
 
-        expect(value).toEqual(input2);
+        expect(value).toEqual({ common: "common", a: "b", d: false });
+      }
+    });
+
+    it("valid 3", () => {
+      type Expected = InferType<typeof schema>;
+
+      const input = { common: "common", a: "b", c: 0, d: false };
+      const result = schema.validate(input);
+
+      if (result.errors) {
+        throw new Error();
+      } else {
+        const value: Expected = result.value;
+
+        expect(value).toEqual({ common: "common", a: "b", d: false });
       }
     });
 
     it("errors", () => {
+      const input = { common: "common", a: "b", c: 0 };
+
+      const result = schema.validate(input);
+
+      expect(result).toEqual({
+        errors: true,
+        messagesTree: [
+          {
+            d: ["Input is required"],
+          },
+        ],
+      });
+    });
+
+    it("errors 2", () => {
       const input = { common: "common", a: "b", d: 0 };
 
       const result = schema.validate(input);
