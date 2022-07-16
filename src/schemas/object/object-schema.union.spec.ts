@@ -199,4 +199,109 @@ describe("Object Schema - Union", () => {
       value: { type: "a", nestedObj: { type: "a", hello: "world" } },
     });
   });
+
+  it("Shoud keep previously validated values that are not set in the latest union() call", () => {
+    const schema = object({
+      a: string().required(),
+      b: string().required(),
+      discriminator1: equals(["c", "d"] as const).required(),
+      discriminator2: equals(["e", "f"] as const).required(),
+    })
+      .required()
+      .union((v) => {
+        if (v.discriminator1 === "c") {
+          return {
+            discriminator1: equals(["c"] as const).required(),
+            c: string().required(),
+          };
+        } else {
+          return {
+            discriminator1: equals(["d"] as const).required(),
+            d: string().required(),
+          };
+        }
+      })
+      .union((v) => {
+        if (v.discriminator2 === "e") {
+          return {
+            discriminator2: equals(["e"] as const).required(),
+            e: string().required(),
+          } as const;
+        } else {
+          return {
+            discriminator2: equals(["f"] as const).required(),
+            f: string().required(),
+          } as const;
+        }
+      });
+
+    const validationResult = schema.validate({
+      a: "hello",
+      b: "world",
+      discriminator1: "c",
+      c: "hello",
+      discriminator2: "e",
+      e: "world",
+    });
+
+    expect(validationResult).toEqual({
+      errors: false,
+      value: {
+        a: "hello",
+        b: "world",
+        discriminator1: "c",
+        c: "hello",
+        discriminator2: "e",
+        e: "world",
+      },
+    });
+  });
+
+  it("Shoud transform previously validated values if latest union() call says so", () => {
+    const schema = object({
+      a: number().required(),
+      discriminator1: equals(["c", "d"] as const).required(),
+    })
+      .union((v) => {
+        if (v.discriminator1 === "c") {
+          return {
+            a: number()
+              .required()
+              .transform(() => "hello"),
+            discriminator1: equals(["c"] as const).required(),
+            c: string().required(),
+          };
+        } else {
+          return {
+            a: number()
+              .required()
+              .transform(() => "hello"),
+            discriminator1: equals(["d"] as const).required(),
+            d: string().required(),
+          };
+        }
+      })
+      .required();
+
+    const validationResult = schema.validate({
+      a: 1,
+      discriminator1: "c",
+      c: "hello",
+    });
+
+    if (validationResult.errors) {
+      throw new Error();
+    }
+
+    const value: { a: string } & (
+      | { discriminator1: "c"; c: string }
+      | { discriminator1: "d"; c?: undefined }
+    ) = validationResult.value;
+
+    expect(value).toEqual({
+      a: "hello",
+      discriminator1: "c",
+      c: "hello",
+    });
+  });
 });
