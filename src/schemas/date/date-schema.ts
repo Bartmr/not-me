@@ -11,13 +11,13 @@ class DateSchemaImpl<_Output = Date | undefined | null> extends BaseSchema<
       const notADateMessages = [
         message ||
           DefaultErrorMessagesManager.getDefaultMessages().date?.notADate ||
-          "Input must be a date",
+          "Must be a date",
       ];
 
       const invalidDateMessages = [
         message ||
           DefaultErrorMessagesManager.getDefaultMessages().date?.invalidDate ||
-          "Input is not a valid date",
+          "Invalid date",
       ];
 
       if (input instanceof Date) {

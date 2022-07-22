@@ -83,7 +83,7 @@ describe("Object Schema - Union", () => {
         errors: true,
         messagesTree: [
           {
-            d: ["Input is required"],
+            d: ["Required"],
           },
         ],
       });
@@ -98,7 +98,7 @@ describe("Object Schema - Union", () => {
         errors: true,
         messagesTree: [
           {
-            d: ["Input must be one of the allowed values"],
+            d: ["Must be one of the allowed values"],
           },
         ],
       });

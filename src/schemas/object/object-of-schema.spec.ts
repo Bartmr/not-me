@@ -26,7 +26,7 @@ describe("Object Of Schema", () => {
       errors: true,
       messagesTree: [
         {
-          b: ["Input must be one of the allowed values"],
+          b: ["Must be one of the allowed values"],
         },
       ],
     });
@@ -38,7 +38,7 @@ describe("Object Of Schema", () => {
 
     expect(result).toEqual({
       errors: true,
-      messagesTree: ["Input must be an object"],
+      messagesTree: ["Must be an object"],
     });
   });
 

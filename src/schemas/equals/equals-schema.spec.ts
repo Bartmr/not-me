@@ -23,7 +23,7 @@ describe("Equals Schema", () => {
 
     expect(result).toEqual({
       errors: true,
-      messagesTree: ["Input must be one of the allowed values"],
+      messagesTree: ["Must be one of the allowed values"],
     });
   });
 });

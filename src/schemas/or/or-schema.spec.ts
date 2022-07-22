@@ -43,4 +43,10 @@ describe("Or Schema", () => {
       messagesTree: expect.any(Array) as unknown,
     });
   });
+
+  it("Should throw when schemas are not provided on declaration", () => {
+    expect(() => {
+      or([] as unknown as [Schema<unknown>]).required();
+    }).toThrow("No schemas provided");
+  });
 });

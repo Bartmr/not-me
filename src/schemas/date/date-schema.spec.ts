@@ -7,7 +7,7 @@ describe("Date Schema", () => {
 
     expect(schema.validate("abc")).toEqual({
       errors: true,
-      messagesTree: ["Input is not a valid date"],
+      messagesTree: ["Invalid date"],
     });
   });
 

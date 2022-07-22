@@ -19,7 +19,7 @@ class EqualsSchemaImpl<
             message ||
               DefaultErrorMessagesManager.getDefaultMessages().equals
                 ?.notEqual ||
-              "Input must be one of the allowed values",
+              "Must be one of the allowed values",
           ],
         };
       }

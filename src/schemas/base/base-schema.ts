@@ -259,7 +259,7 @@ export abstract class BaseSchema<
         message ||
         DefaultErrorMessagesManager.getDefaultMessages().base
           ?.cannotBeUndefined ||
-        "Input must be defined",
+        "Cannot be undefined",
     });
   }
 
@@ -269,7 +269,7 @@ export abstract class BaseSchema<
       message:
         message ||
         DefaultErrorMessagesManager.getDefaultMessages().base?.cannotBeNull ||
-        "Input cannot be null",
+        "Cannot be null",
     });
   }
 
@@ -279,7 +279,7 @@ export abstract class BaseSchema<
       message:
         message ||
         DefaultErrorMessagesManager.getDefaultMessages().base?.isRequired ||
-        "Input is required",
+        "Required",
     });
   }
 

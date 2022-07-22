@@ -7,7 +7,7 @@ describe("Number Schema", () => {
 
     expect(schema.validate("abc")).toEqual({
       errors: true,
-      messagesTree: ["Input must be a number"],
+      messagesTree: ["Must be a number"],
     });
   });
 

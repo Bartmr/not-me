@@ -11,7 +11,7 @@ class NumberSchemaImpl<_Output = number | undefined | null> extends BaseSchema<
       const typeErrorMessage = [
         message ||
           DefaultErrorMessagesManager.getDefaultMessages().number?.notANumber ||
-          "Input must be a number",
+          "Must be a number",
       ];
 
       if (typeof input === "number" || typeof input === "string") {

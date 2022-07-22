@@ -29,7 +29,7 @@ describe("Array Schema", () => {
   it("Should fail when input is not an array", () => {
     expect(schema.validate(4)).toEqual({
       errors: true,
-      messagesTree: ["Input must be an array"],
+      messagesTree: ["Must be an array"],
     });
   });
 
@@ -38,7 +38,7 @@ describe("Array Schema", () => {
       errors: true,
       messagesTree: [
         {
-          2: [{ someProp: ["Input must be one of the allowed values"] }],
+          2: [{ someProp: ["Must be one of the allowed values"] }],
         },
       ],
     });

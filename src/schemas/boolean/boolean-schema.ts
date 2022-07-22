@@ -21,7 +21,7 @@ class BooleanSchemaImpl<
           message ||
             DefaultErrorMessagesManager.getDefaultMessages().boolean
               ?.notABoolean ||
-            "Input must be a true or false",
+            "Must be a boolean",
         ];
 
         return {

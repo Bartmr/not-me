@@ -25,7 +25,7 @@ describe("Object Schema", () => {
       errors: true,
       messagesTree: [
         {
-          a: ["Input must be an object"],
+          a: ["Must be an object"],
         },
       ],
     });
@@ -40,7 +40,7 @@ describe("Object Schema", () => {
 
     expect(result).toEqual({
       errors: true,
-      messagesTree: [{ a: ["Input is required"] }],
+      messagesTree: [{ a: ["Required"] }],
     });
   });
 
@@ -53,7 +53,7 @@ describe("Object Schema", () => {
 
     expect(result).toEqual({
       errors: true,
-      messagesTree: [{ a: ["Input must be a string"] }],
+      messagesTree: [{ a: ["Must be a string"] }],
     });
   });
 

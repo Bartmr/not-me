@@ -89,14 +89,14 @@ describe("Base Schema", () => {
 
     expect(undefinedRes).toEqual({
       errors: true,
-      messagesTree: ["Input is required"],
+      messagesTree: ["Required"],
     });
 
     const nullRes = schema.validate(null);
 
     expect(nullRes).toEqual({
       errors: true,
-      messagesTree: ["Input is required"],
+      messagesTree: ["Required"],
     });
   });
 

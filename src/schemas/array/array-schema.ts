@@ -31,7 +31,7 @@ class ArraySchemaImpl<
             message ||
               DefaultErrorMessagesManager.getDefaultMessages().array
                 ?.notAnArray ||
-              "Input must be an array",
+              "Must be an array",
           ],
         };
       }

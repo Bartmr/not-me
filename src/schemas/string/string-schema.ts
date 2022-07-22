@@ -16,7 +16,7 @@ abstract class StringSchemaImpl<
           message ||
             DefaultErrorMessagesManager.getDefaultMessages().string
               ?.notAString ||
-            "Input must be a string",
+            "Must be a string",
         ];
 
         return {
