@@ -27,6 +27,7 @@ To continue with the update write yes and press Enter.
   git add .
   git reset --hard
 
+  git remote remove boilerplate
   git remote add boilerplate $git_url
 
   git fetch boilerplate $git_branch
@@ -44,8 +45,6 @@ To continue with the update write yes and press Enter.
 - Run 'npm install', in case any dependencies were changed or added
 
 - Check if any of the changes made by the updates require a new migration to be written
-
-- Run 'npm run integrity-check:all' to make sure the updates didn't break any part of your project
 
 - Run 'git add .' to stage all the accepted updates
 

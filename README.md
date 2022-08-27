@@ -173,7 +173,7 @@ When you set up a schema, you're just pilling up filter functions that will test
   - package.json
     - `engine` field
     - `@types/node` version
-  - tsconfig.json
+  - tsconfig.base.json
   - .github/workflows/main.yml and other CI config files
 - delete all `node_modules` directories and `package-lock.json` files
 - run `npm run install`
